@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html lang="id">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hasil Pemilihan Presiden Mahasiswa</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+    <style>
+        body {
+            box-sizing: border-box;
+        }
+
+        .preserve-newlines {
+            white-space: pre-wrap;
+        }
+
+        .gradient-bg {
+            background: linear-gradient(140deg, #1e3a8a 0%, #255267 100%);
+        }
+
+        p {
+            color: rgb(255, 255, 255);
+        }
+
+        h1 {
+            color: rgb(255, 255, 255);
+        }
+
+        .card-shadow {
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+        }
+
+        .animate-fade-in {
+            animation: fadeIn 0.5s ease-in;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .vote-card {
+            transition: all 0.3s ease;
+        }
+
+        .vote-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.15);
+        }
+
+        .progress-bar {
+            transition: width 0.5s ease-in-out;
+        }
+
+        /* Tambahan untuk spinner loading */
+        .spinner {
+            display: inline-block;
+            width: 16px;
+            height: 16px;
+            border: 2px solid #ffffff;
+            border-radius: 50%;
+            border-top-color: transparent;
+            animation: spin 1s ease-in-out infinite;
+            margin-right: 8px;
+        }
+
+        .spinner.hidden {
+            display: none;
+        }
+
+        @keyframes spin {
+            to {
+                transform: rotate(360deg);
+            }
+        }
+
+        button:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+        }
+
+        .edit-bg {
+            background-color: rgba(255, 255, 255, 0.192);
+            border: 2px solid #c7c7c7;
+            border-radius: 10px;
+            -webkit-backdrop-filter: blur(10px);
+            backdrop-filter: blur(10px);
+            box-shadow: 0 0 30px rgba(0, 0, 0, 0.705);
+        }
+
+        .edit-bg1 {
+            background-color: rgba(0, 0, 0, 0.192);
+            border: 2px solid #c7c7c7;
+            border-radius: 10px;
+            -webkit-backdrop-filter: blur(10px);
+            backdrop-filter: blur(10px);
+            box-shadow: 0 0 30px rgba(0, 0, 0, 0.705);
+        }
+
+        .wrep {
+            position: relative;
+            background-color: transparent;
+            -webkit-backdrop-filter: blur(10px);
+            backdrop-filter: blur(10px);
+            box-shadow: 0 0 30px rgba(0, 0, 0, 0.5);
+        }
+
+        .wrep .form-edit input {
+            width: 100%;
+            position: relative;
+        }
+
+        .wrep .form-edit .edit-input {
+            position: relative;
+            width: 100%;
+            height: 50px;
+            border-bottom: 2px solid #ffffff;
+            margin: 30px 0;
+        }
+
+        .wrep .form-edit .edit-input label {
+            position: absolute;
+            top: 50%;
+            left: 5px;
+            transform: translateY(-50%);
+            font-weight: 500;
+            color: #000000;
+            pointer-events: none;
+        }
+
+        .wrep .form-edit .edit-input input:focus~label,
+        .wrep .form-edit .edit-input input:valid~label {
+            transform: translateY(-50%);
+            top: -10px;
+            left: 0;
+            color: #ffffff;
+        }
+
+        .form-edit .edit-input input {
+            width: 100%;
+            height: 100%;
+            background-color: rgba(255, 255, 255, 0.082);
+            border: none;
+            outline: none;
+            color: #ffffff;
+            font-size: 1.1rem;
+        }
+
+        .form-edit .edit-input .icon {
+            position: absolute;
+            right: 10px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #010101;
+            font-size: 1.5rem;
+            line-height: 57px;
+        }
+
+        .borrder {
+            border: #ffffff 2px solid;
+        }
+
+        .borrder-tombol2 {
+            background-color: #255267;
+            color: #C9E1EB;
+            border: #C9E1EB 1px solid;
+            box-shadow: 0 0 5px rgba(0, 0, 0, 0.705);
+        }
+
+        .borrder-tombol2:hover {
+            background-color: #c9e1eb70;
+            border: transparent 1px solid;
+            color: #0f222c;
+        }
+    </style>
+</head>
+
+<body class="gradient-bg min-h-screen">
+    <!-- Results Page -->
+    <div id="resultsPage" class="min-h-screen">
+        <header class="bg-white card-shadow p-6 mb-8 animate-fade-in">
+            <div class="flex justify-between items-center">
+                <div>
+                    <h1 class="text-3xl font-bold text-gray-800">Hasil Pemilihan</h1>
+                    <p class="text-gray-600 mt-2">Hasil sementara pemilihan presiden mahasiswa</p>
+                </div>
+                <div class="flex gap-2">
+                    <button onclick="logout()" id="logoutResultsBtn"
+                        class="bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded-lg transition-colors">
+                        <span class="spinner hidden"></span>
+                        Kembali
+                    </button>
+                </div>
+            </div>
+        </header>
+
+        <main class="max-w-4xl mx-auto">
+            <div class="bg-white rounded-2xl card-shadow p-8 animate-fade-in">
+                <div class="mb-8">
+                    <div class="flex justify-between items-center mb-4">
+                        <h2 class="text-2xl font-bold text-gray-800">Perolehan Suara (2 kolom fake)</h2>
+                        <div class="text-sm text-gray-600">
+                            Total Suara: <span id="totalVotes" class="font-semibold">0</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="space-y-6">
+                    <div id="resultsContainer">
+                        <!-- Akan diisi dinamis -->
+                    </div>
+                </div>
+        </main>
+    </div>
+
+    <script src="script.js"></script>
+    <script type="module" src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"></script>
+    <script nomodule src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.js"></script>
+</body>
+
+</html>
