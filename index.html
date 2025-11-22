@@ -100,6 +100,154 @@
                 /* Lebar card lebih kecil untuk mobile */
             }
         }
+
+        /* === CHAT BUBBLE (floating button) === */
+        .chat-bubble {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background: #0e76a8;
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 28px;
+            color: white;
+            cursor: pointer;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+            transition: 0.3s;
+        }
+
+        .chat-bubble:hover {
+            transform: scale(1.1);
+        }
+
+        /* === POPUP CHAT BOX === */
+        .chat-box {
+            position: fixed;
+            bottom: 100px;
+            right: 20px;
+            width: 300px;
+            height: 380px;
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+            display: none;
+            flex-direction: column;
+            overflow: hidden;
+        }
+
+        /* Header */
+        .chat-header {
+            background: #0e76a8;
+            padding: 12px;
+            color: white;
+            text-align: center;
+            font-weight: bold;
+        }
+
+        /* Chat area */
+        .chat-content {
+            flex: 1;
+            padding: 10px;
+            overflow-y: auto;
+            font-size: 14px;
+        }
+
+        /* Bubble pesan */
+        .msg {
+            max-width: 80%;
+            padding: 8px;
+            margin-bottom: 10px;
+            border-radius: 10px;
+        }
+
+        .user {
+            background: #d1ecf1;
+            margin-left: auto;
+        }
+
+        .bot {
+            background: #f1f1f1;
+            margin-right: auto;
+        }
+
+        /* Input area */
+        .chat-input {
+            display: flex;
+            border-top: 1px solid #ddd;
+        }
+
+        .chat-input input {
+            flex: 1;
+            padding: 10px;
+            border: none;
+            outline: none;
+            font-size: 14px;
+        }
+
+        .chat-input button {
+            background: #0e76a8;
+            border: none;
+            padding: 10px 15px;
+            color: rgba(255, 255, 255, 0.541);
+            cursor: pointer;
+        }
+
+        @media (max-width: 320px) {
+            .hp-top {
+                margin-top: 80px;
+            }
+
+            .hp-teks {
+                font-size: 1.5rem;
+            }
+
+            .hp-space>*+* {
+                margin-left: 10px;
+                /* sama seperti space-x-5 */
+            }
+
+            .chat-box {
+                position: fixed;
+                bottom: 90px;
+                right: 20px;
+                width: 280px;
+                height: 300px;
+                background: rgba(255, 255, 255, 0.411);
+                border-radius: 15px;
+                box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+                display: none;
+                flex-direction: column;
+                overflow: hidden;
+            }
+        }
+
+        @media (min-width: 321px) {
+            .hp-teks {
+                font-size: 1.8rem;
+            }
+            .chat-box {
+                position: fixed;
+                bottom: 90px;
+                right: 20px;
+                width: 310px;
+                height: 400px;
+                background: rgba(255, 255, 255, 0.411);
+                border-radius: 15px;
+                box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+                display: none;
+                flex-direction: column;
+                overflow: hidden;
+            }
+
+            .hp-space>*+* {
+                margin-left: 20px;
+                /* sama seperti space-x-5 */
+            }
+        }
     </style>
 </head>
 
@@ -132,11 +280,12 @@
     </nav>
 
     <!-- Section 1: Home -->
-    <section id="home" class="h-screen flex flex-col justify-center items-center text-center px-4 fade-in">
-        <h1 class="text-3xl md:text-5xl font-bold mb-4">Selamat Datang <br>Di Pemilihan Presiden Mahasiswa Periode <br>2025-2026
+    <section id="home" class="hp-top h-screen flex flex-col justify-center items-center text-center px-4 fade-in">
+        <h1 class="hp-teks md:text-5xl font-bold mb-4">Selamat Datang <br>Di Pemilihan Presiden Mahasiswa Periode
+            <br>2025-2026
         </h1>
         <p class="text-lg md:text-xl mb-8">Pemilihan dimulai pada 1 Desember 2025 di Aula Kampus.</p>
-        <div id="countdown" class="flex space-x-5 mb-8 md:space-x-8">
+        <div id="countdown" class="flex hp-space mb-8 md:space-x-8">
             <div class="countdown-box rounded-xl p-4 text-center">
                 <div class="text-2xl font-bold" id="days">00</div>
                 <div class="text-sm">Hari</div>
@@ -161,13 +310,15 @@
 
     <!-- Section 2: About -->
     <section id="about" class="py-20 px-4 fade-in items-center">
-        <h2 class="text-3xl md:text-4xl font-bold mb-8 md:mt-12 text-center">Tentang KPU Presiden Mahasiswa</h2>
-        <div class="container mx-auto md:mt-20 grid grid-cols-1 md:grid-cols-2 gap-8 items-center mb-6 justify-items-center">
+        <h2 class="hp-teks md:text-4xl font-bold mb-8 md:mt-12 text-center">Tentang KPU Presiden Mahasiswa</h2>
+        <div
+            class="container mx-auto md:mt-20 grid grid-cols-1 md:grid-cols-2 gap-8 items-center mb-6 justify-items-center">
             <div>
                 <img src="kpu.jpg" alt="KPU Logo" class="w-48 h-48 md:h-64 md:w-64 object-cover rounded-full shadow-lg">
             </div>
             <div class="">
-                <p class="text-sm md:text-xl text-center md:text-left leading-relaxed">Komisi Pemilihan Umum (KPU) Presiden Mahasiswa adalah
+                <p class="text-sm md:text-xl text-center md:text-left leading-relaxed">Komisi Pemilihan Umum (KPU)
+                    Presiden Mahasiswa adalah
                     lembaga yang bertanggung jawab atas penyelenggaraan pemilihan presiden mahasiswa secara demokratis
                     dan transparan. Pemilihan ini penting karena memberikan kesempatan kepada mahasiswa untuk
                     berpartisipasi aktif dalam proses demokrasi kampus, memilih pemimpin yang akan mewakili aspirasi
@@ -180,8 +331,8 @@
     <!-- Section 3: Explore -->
     <section id="explore" class="py-20 px-4 fade-in">
         <div class="container mx-auto text-center">
-            <h2 class="text-3xl font-bold mb-8 md:mt-10">Pelajari Teknis KPU Presiden Mahasiswa</h2>
-            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 justify-items-center items-center">
+            <h2 class="hp-teks font-bold mb-8 md:mt-10">Pelajari Teknis KPU Presiden Mahasiswa</h2>
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-8 justify-items-center items-center">
                 <div class="explore-item bg-white bg-opacity-10 rounded-xl p-4 shadow-lg">
                     <h1 class="font-semibold text-xl md:text-2xl mb-2">Panduan Cara Voting</h1>
                     <img src="contoh1.png" alt="Contoh 1" class="w-full h-48 object-cover rounded-lg mb-4">
@@ -193,20 +344,21 @@
                         video</button>
                 </div>
                 <div class="explore-item bg-white bg-opacity-10 rounded-xl p-4 shadow-lg">
-                    <h1 class="font-semibold text-xl md:text-2xl mb-2">Simulasi Voting</h1>
-                    <img src="contoh1.png" alt="Contoh 1" class="w-full h-48 object-cover rounded-lg mb-4">
-                    <button onclick="window.location.href='user/index.html'"
-                        class="bg-blue-100 hover:bg-blue-500 text-blue-900 hover:text-blue-100 font-semibold text-sm py-2 px-4 rounded-xl transition mr-4">Coba Sekarang</button>
-                </div>
-                <div class="explore-item bg-white bg-opacity-10 rounded-xl p-4 shadow-lg">
-                    <h1 class="font-semibold text-xl md:text-2xl mb-2">Peraturan/Tatib</h1>
+                    <h1 class="font-semibold text-xl md:text-2xl mb-2">Dokumentasi Acara</h1>
                     <img src="contoh1.png" alt="Contoh 1" class="w-full h-48 object-cover rounded-lg mb-4">
                     <button onclick="window.location.href='#explore'"
                         class="bg-blue-100 hover:bg-blue-500 text-blue-900 hover:text-blue-100 font-semibold text-sm py-2 px-4 rounded-xl transition mr-4">Lihat
-                        PDF</button>
+                        Halaman</button>
                 </div>
             </div>
-            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-8 justify-items-center items-center mt-8">
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 justify-items-center items-center mt-8">
+                <div class="explore-item bg-white bg-opacity-10 rounded-xl p-4 shadow-lg">
+                    <h1 class="font-semibold text-xl md:text-2xl mb-2">Simulasi Voting</h1>
+                    <img src="contoh1.png" alt="Contoh 1" class="w-full h-48 object-cover rounded-lg mb-4">
+                    <button onclick="window.location.href='user/index.html'"
+                        class="bg-blue-100 hover:bg-blue-500 text-blue-900 hover:text-blue-100 font-semibold text-sm py-2 px-4 rounded-xl transition mr-4">Lihat
+                        Halaman</button>
+                </div>
                 <div class="explore-item bg-white bg-opacity-10 rounded-xl p-4 shadow-lg">
                     <h1 class="font-semibold text-xl md:text-2xl mb-2">Hasil Sementara</h1>
                     <img src="contoh1.png" alt="Contoh 1" class="w-full h-48 object-cover rounded-lg mb-4">
@@ -228,7 +380,7 @@
     <!-- Section 4: Panitia -->
     <!-- <section id="panitia" class="py-20 px-4 fade-in hidden">
         <div class="container mx-auto text-center">
-            <h2 class="text-3xl font-bold mb-8">Panitia KPU Presma & Capresma</h2>
+            <h2 class="hp-teks font-bold mb-8">Panitia KPU Presma & Capresma</h2>
             <div class="relative flex items-center justify-center">
                 <button id="prev-btn"
                     class="absolute left-0 top-1 transform -translate-y-1 bg-blue-300 hover:bg-blue-400 text-blue-900 p-2 rounded-full">←</button>
@@ -251,15 +403,15 @@
     <!-- Section 5: Contact -->
     <section id="contact" class="py-20 px-4 fade-in">
         <div class="container mx-auto max-w-md md:max-w-full md:mt-6">
-            <h2 class="text-3xl md:text-3xl font-bold mb-2 text-center">Hubungi Kami</h2>
-            <h2 class="text-sm md:text-lg mb-8 text-center">Bila ada masukan atau ingin ditanyakan boleh hubungi kami</h2>
-            <form id="contact-form" class="space-y-4 md:space-y-2 bg-white bg-opacity-10 rounded-xl p-8 shadow-lg">
+            <h2 class="hp-teks md:text-3xl font-bold mb-8 text-center">Hubungi Kami</h2>
+            <form id="contact-form" class="space-y-4 md:space-y-4 bg-white bg-opacity-10 rounded-xl p-8 shadow-lg">
                 <input type="text" id="nama" placeholder="Nama"
                     class="w-full p-3 md:p-2 rounded-xl bg-white bg-opacity-10 border border-blue-300" required>
                 <input type="text" id="subject" placeholder="Subject Pesan"
                     class="w-full p-3 md:p-2 rounded-xl bg-white bg-opacity-10 border border-blue-300" required>
                 <textarea id="pesan" placeholder="Pesan" rows="5"
-                    class="w-full p-3 md:p-2 rounded-xl bg-white bg-opacity-10 border border-blue-300" required></textarea>
+                    class="w-full p-3 md:p-2 rounded-xl bg-white bg-opacity-10 border border-blue-300"
+                    required></textarea>
                 <button type="submit" id="kirim"
                     class="w-full bg-blue-300 hover:bg-blue-400 text-blue-900 font-semibold py-3 rounded-xl transition">
                     <span class="spinner hidden"></span>Kirim
@@ -277,190 +429,29 @@
 
     <!-- Footer -->
     <footer class="bg-blue-900 text-sm opacity-60 py-4 text-center">
-        <p>&copy; 2025 KPU Presma. Dikembangkan oleh Samba.</p>
+        <p>&copy; 2025 KPU Presma. Dikembangkan oleh Panitia KPU (Samba). </p>
     </footer>
 
-    <script>
+    <!-- CHAT BUBBLE -->
+    <div class="chat-bubble" id="chatBubble">💬</div>
 
-        function setLoadingState(buttonId, isLoading) {
-            const button = document.getElementById(buttonId);
-            if (!button) return;
-            const spinner = button.querySelector('.spinner');
-            if (isLoading) {
-                spinner.classList.remove('hidden');
-                button.disabled = true;
-            } else {
-                spinner.classList.add('hidden');
-                button.disabled = false;
-            }
-        }
+    <!-- CHAT BOX -->
+    <div class="chat-box text-blue-900" id="chatBox">
 
-        // Navbar scroll effect
-        window.addEventListener('scroll', () => {
-            const navbar = document.getElementById('navbar');
-            if (window.scrollY > 50) {
-                navbar.classList.add('navbar-solid');
-            } else {
-                navbar.classList.remove('navbar-solid');
-            }
-        });
+        <div class="chat-header">Live Chat</div>
 
-        // Smooth scroll for navbar links
-        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-            anchor.addEventListener('click', function (e) {
-                e.preventDefault();
-                const target = document.querySelector(this.getAttribute('href'));
-                target.scrollIntoView({
-                    behavior: 'smooth',
-                    block: 'start'
-                });
-                // Close mobile menu if open
-                document.getElementById('mobile-menu').classList.add('hidden');
-            });
-        });
+        <div class="chat-content" id="chatContent">
+            <!-- Pesan muncul di sini -->
+        </div>
 
-        // Hamburger menu toggle
-        document.getElementById('hamburger').addEventListener('click', () => {
-            document.getElementById('mobile-menu').classList.toggle('hidden');
-        });
+        <div class="chat-input">
+            <input type="text" id="chatInput" placeholder="Tulis pesan...">
+            <button id="sendBtn">Kirim</button>
+        </div>
 
-        // Countdown timer to December 1, 2025
-        function updateCountdown() {
-            const targetDate = new Date('2025-12-01T00:00:00').getTime();
-            const now = new Date().getTime();
-            const distance = targetDate - now;
+    </div>
 
-            if (distance > 0) {
-                const days = Math.floor(distance / (1000 * 60 * 60 * 24));
-                const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-                const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
-                const seconds = Math.floor((distance % (1000 * 60)) / 1000);
-
-                document.getElementById('days').innerText = days.toString().padStart(2, '0');
-                document.getElementById('hours').innerText = hours.toString().padStart(2, '0');
-                document.getElementById('minutes').innerText = minutes.toString().padStart(2, '0');
-                document.getElementById('seconds').innerText = seconds.toString().padStart(2, '0');
-            } else {
-                document.getElementById('countdown').innerHTML = '<div class="text-xl">Pemilihan Telah Dimulai!</div>';
-            }
-        }
-        setInterval(updateCountdown, 1000);
-        updateCountdown();
-
-        // Explore button scroll
-        document.getElementById('explore-btn').addEventListener('click', () => {
-            document.getElementById('explore').scrollIntoView({ behavior: 'smooth' });
-        });
-
-        // Fade-in animation with IntersectionObserver
-        const observerOptions = {
-            threshold: 0.1
-        };
-        const observer = new IntersectionObserver((entries) => {
-            entries.forEach(entry => {
-                if (entry.isIntersecting) {
-                    entry.target.classList.add('visible');
-                }
-            });
-        }, observerOptions);
-
-        document.querySelectorAll('.fade-in').forEach(el => observer.observe(el));
-
-        // Panitia slider - Infinite loop to the right, showing 5 cards, center card highlighted
-        // const slider = document.getElementById('slider');
-        // const cards = slider.children;
-        // const cardWidth = 208; // w-48 + space-x-4 approx
-        // const totalOriginalCards = 21;
-        // const visibleCards = 3;
-
-        // Function to update center card (position 3 in visible 5 cards)
-        // function updateCenterCard() {
-        //     const scrollIndex = Math.floor(slider.scrollLeft / cardWidth);
-        //     const centerIndex = (scrollIndex + 3) % cards.length; // Center is offset by 3 for 5 visible
-        //     Array.from(cards).forEach((card, index) => {
-        //         card.classList.remove('center');
-        //         if (index === centerIndex) {
-        //             card.classList.add('center');
-        //         }
-        //     });
-        // }
-
-        // Auto-scroll every 3 seconds, infinite to the right
-        // setInterval(() => {
-        //     slider.scrollLeft += cardWidth;
-        //     // When reaching the end of duplicated cards, reset to start smoothly
-        //     if (slider.scrollLeft >= (totalOriginalCards * 3) * cardWidth) {
-        //         slider.scrollLeft = 0;
-        //     }
-        //     updateCenterCard();
-        // }, 3000);
-
-        // Navigation buttons
-        // document.getElementById('prev-btn').addEventListener('click', () => {
-        //     slider.scrollLeft -= cardWidth;
-        //     if (slider.scrollLeft < 0) {
-        //         slider.scrollLeft = (totalOriginalCards * 3 - 1) * cardWidth;
-        //     }
-        //     updateCenterCard();
-        // });
-
-        // document.getElementById('next-btn').addEventListener('click', () => {
-        //     slider.scrollLeft += cardWidth;
-        //     if (slider.scrollLeft >= (totalOriginalCards * 3) * cardWidth) {
-        //         slider.scrollLeft = 0;
-        //     }
-        //     updateCenterCard();
-        // });
-
-        // // Initial center update
-        // updateCenterCard();
-
-        // Contact form submission to Supabase
-        // Note: Replace with your actual Supabase URL and anon key
-        const SUPABASE_URL = 'https://xxwwbydzorlxulbcrldo.supabase.co'; // Placeholder: Ganti dengan URL Supabase Anda
-        const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Inh4d3dieWR6b3JseHVsYmNybGRvIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjExMDAxMDYsImV4cCI6MjA3NjY3NjEwNn0.La5nOg80azsQp_ZuqXuj0CI552hQBwdwWgxEqfaDlDk'; // Placeholder: Ganti dengan Anon Key Supabase Anda
-        const supabase = {
-            from: (table) => ({
-                insert: (data) => fetch(`${SUPABASE_URL}/rest/v1/${table}`, {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                        'apikey': SUPABASE_ANON_KEY,
-                        'Authorization': `Bearer ${SUPABASE_ANON_KEY}`
-                    },
-                    body: JSON.stringify(data)
-                }).then(res => res.json())
-            })
-        };
-
-        document.getElementById('contact-form').addEventListener('submit', async (e) => {
-            e.preventDefault();
-            setLoadingState('kirim', true);
-            const nama = document.getElementById('nama').value.trim();
-            const subject = document.getElementById('subject').value.trim();
-            const pesan = document.getElementById('pesan').value.trim();
-
-            if (!nama || !subject || !pesan) {
-                alert('Semua field harus diisi!');
-                setLoadingState('kirim', false);
-                return;
-            }
-
-            try {
-                const { data, error } = await supabase.from('masukan').insert([{ Nama: nama, Subject: subject, Pesan: pesan }]);
-                if (error) throw error;
-                setLoadingState('kirim', false);
-                alert('Pesan berhasil dikirim!');
-                document.getElementById('contact-form').reset();
-            }
-            catch (error) {
-                setLoadingState('kirim', false);
-                alert('Pesan berhasil dikirim!');
-                document.getElementById('contact-form').reset();
-                // alert('Terjadi kesalahan: ' + error.message);
-            }
-        });
-    </script>
+    <script src="script.js"></script>
 </body>
 
 </html>
