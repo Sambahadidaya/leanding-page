@@ -182,30 +182,34 @@
             border: transparent 1px solid;
             color: #0f222c;
         }
+
+        .glassmorphism {
+            -webkit-backdrop-filter: blur(10px);
+            backdrop-filter: blur(10px);
+            background: rgba(255, 255, 255, 0.1);
+        }
     </style>
 </head>
 
-<body class="gradient-bg min-h-screen">
+<body class="bg-gradient-to-br from-blue-900 via-blue-700 to-blue-500 min-h-screen">
     <!-- Results Page -->
-    <div id="resultsPage" class="min-h-screen">
-        <header class="bg-white card-shadow p-6 mb-8 animate-fade-in">
-            <div class="flex justify-between items-center">
-                <div>
-                    <h1 class="text-3xl font-bold text-gray-800">Hasil Pemilihan</h1>
-                    <p class="text-gray-600 mt-2">Hasil sementara pemilihan presiden mahasiswa</p>
-                </div>
-                <div class="flex gap-2">
-                    <button onclick="logout()" id="logoutResultsBtn"
-                        class="bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded-lg transition-colors">
-                        <span class="spinner hidden"></span>
-                        Kembali
-                    </button>
-                </div>
+    <div id="resultsPage" class="min-h-screen mb-4">
+        <header class="glassmorphism shadow-md mb-8 p-4 flex justify-between items-center text-white">
+            <div>
+                <h1 class="text-3xl font-bold">Hasil Pemilihan</h1>
+                <p class="mt-2">Hasil sementara pemilihan presiden mahasiswa</p>
+            </div>
+            <div class="flex gap-2">
+                <button onclick="logout()" id="logoutResultsBtn"
+                    class="bg-blue-100 hover:bg-blue-500 text-blue-900 hover:text-blue-100 font-semibold px-4 py-2 rounded-lg transition duration-300">
+                    <span class="spinner hidden"></span>
+                    Kembali
+                </button>
             </div>
         </header>
 
         <main class="max-w-4xl mx-auto">
-            <div class="bg-white rounded-2xl card-shadow p-8 animate-fade-in">
+            <div class="bg-[#F2F8F6] rounded-2xl card-shadow p-8 animate-fade-in">
                 <div class="mb-8">
                     <div class="flex justify-between items-center mb-4">
                         <h2 class="text-2xl font-bold text-gray-800">Perolehan Suara (2 kolom fake)</h2>
@@ -222,6 +226,11 @@
                 </div>
         </main>
     </div>
+    <!-- Footer -->
+    <footer class="bg-blue-900 mt-8 text-center text-white font-semibold py-4 text-sm opacity-60 sm:mt-auto md:mt-auto">
+        <!-- Tambahkan mt-auto untuk push ke bawah -->
+        © Coppyright KPU 2026. Dikembangkan oleh Panitia KPU(Samba).
+    </footer>
 
     <script src="script.js"></script>
     <script type="module" src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"></script>
