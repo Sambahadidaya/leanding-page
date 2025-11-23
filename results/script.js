@@ -100,7 +100,7 @@ async function updateResults() {
                 </div>
                 <div>
                   <h3 class="font-bold text-gray-800">  ???</h3>
-                  <p class="text-sm text-gray-600">Calon No.  ???</p>
+                  <p class="text-sm text-gray-600">Kandidat No.  ???</p>
                 </div>
               </div>
               <div class="text-right">
@@ -143,7 +143,7 @@ function logout(buttonId) {
     setLoadingState(buttonId, true);
     setTimeout(() => {
         // Redirect ke index.html atau halaman utama
-        window.location.href = '/index.html';
+        window.location.href = '/kirim/index.html';
         setLoadingState(buttonId, false);
     }, 500);
 }
