@@ -1,0 +1,415 @@
+<!DOCTYPE html>
+<html lang="id">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Detail Kandidat - Pemilihan Presiden Mahasiswa</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+    <!-- Salin semua style dari index.html asli -->
+    <style>
+        body {
+            box-sizing: border-box;
+        }
+
+        .preserve-newlines {
+            white-space: pre-wrap;
+        }
+
+        .gradient-bg {
+            background: linear-gradient(140deg, #1e3a8a 0%, #255267 100%);
+        }
+
+        p {
+            color: rgb(255, 255, 255);
+        }
+
+        h1 {
+            color: rgb(255, 255, 255);
+        }
+
+        .card-shadow {
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+        }
+
+        .animate-fade-in {
+            animation: fadeIn 0.5s ease-in;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .vote-card {
+            transition: all 0.3s ease;
+        }
+
+        .vote-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.15);
+        }
+
+        .progress-bar {
+            transition: width 0.5s ease-in-out;
+        }
+
+        /* Tambahan untuk spinner loading */
+        .spinner {
+            display: inline-block;
+            width: 16px;
+            height: 16px;
+            border: 2px solid #ffffff;
+            border-radius: 50%;
+            border-top-color: transparent;
+            animation: spin 1s ease-in-out infinite;
+            margin-right: 8px;
+        }
+
+        .spinner.hidden {
+            display: none;
+        }
+
+        @keyframes spin {
+            to {
+                transform: rotate(360deg);
+            }
+        }
+
+        button:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+        }
+
+        .edit-bg {
+            background-color: rgba(255, 255, 255, 0.192);
+            border: 2px solid #c7c7c7;
+            border-radius: 10px;
+            -webkit-backdrop-filter: blur(10px);
+            backdrop-filter: blur(10px);
+            box-shadow: 0 0 30px rgba(0, 0, 0, 0.705);
+        }
+
+        .edit-bg1 {
+            background-color: rgba(0, 0, 0, 0.192);
+            border: 2px solid #c7c7c7;
+            border-radius: 10px;
+            -webkit-backdrop-filter: blur(10px);
+            backdrop-filter: blur(10px);
+            box-shadow: 0 0 30px rgba(0, 0, 0, 0.705);
+        }
+
+        .wrep {
+            position: relative;
+            background-color: transparent;
+            -webkit-backdrop-filter: blur(10px);
+            backdrop-filter: blur(10px);
+            box-shadow: 0 0 30px rgba(0, 0, 0, 0.5);
+        }
+
+        .wrep .form-edit input {
+            width: 100%;
+            position: relative;
+        }
+
+        .wrep .form-edit .edit-input {
+            position: relative;
+            width: 100%;
+            height: 50px;
+            border-bottom: 2px solid #ffffff;
+            margin: 30px 0;
+        }
+
+        .wrep .form-edit .edit-input label {
+            position: absolute;
+            top: 50%;
+            left: 5px;
+            transform: translateY(-50%);
+            font-weight: 500;
+            color: #000000;
+            pointer-events: none;
+        }
+
+        .wrep .form-edit .edit-input input:focus~label,
+        .wrep .form-edit .edit-input input:valid~label {
+            transform: translateY(-50%);
+            top: -10px;
+            left: 0;
+            color: #ffffff;
+        }
+
+        .form-edit .edit-input input {
+            width: 100%;
+            height: 100%;
+            background-color: rgba(255, 255, 255, 0.082);
+            border: none;
+            outline: none;
+            color: #ffffff;
+            font-size: 1.1rem;
+        }
+
+        .form-edit .edit-input .icon {
+            position: absolute;
+            right: 10px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #010101;
+            font-size: 1.5rem;
+            line-height: 57px;
+        }
+
+        .borrder {
+            border: #ffffff 2px solid;
+        }
+
+        .borrder-tombol2 {
+            background-color: #255267;
+            color: #C9E1EB;
+            border: #C9E1EB 1px solid;
+            box-shadow: 0 0 5px rgba(0, 0, 0, 0.705);
+        }
+
+        .borrder-tombol2:hover {
+            background-color: #c9e1eb70;
+            border: transparent 1px solid;
+            color: #0f222c;
+        }
+    </style>
+</head>
+
+<body class="bg-gradient-to-br from-blue-900 via-blue-700 to-blue-500 min-h-screen">
+    <!-- Detail Kandidat Page (Disalin dari votingPage, tapi tanpa elemen voting) -->
+    <div id="detailPage" class="min-h-screen animate-fade-in">
+        <!-- Header (Disalin dari votingPage, tapi tanpa logout jika tidak perlu; atau sesuaikan) -->
+        <header class="bg-[#01010138] shadow-md p-4 flex justify-between items-center">
+            <span class="text-sm sm:text-lg md:text-xl text-center text-[#F2F8F6] font-bold">Detail Kandidat</span>
+            <!-- Opsional: Tambahkan tombol kembali atau navigasi -->
+            <div class="flex items-center space-x-4">
+                <button onclick="logout()" id="logoutResultsBtn"
+                    class="borrder-tombol2 px-2 py-1 sm:px-4 sm:py-2 md:px-4 md:py-2 rounded-lg transition-colors duration-200">Kembali</button>
+            </div>
+        </header>
+
+        <!-- Main Content (Disalin dari votingPage, tapi tanpa tombol pilih) -->
+        <main class="flex flex-col sm:flex-row min-h-[calc(80vh-80px)]">
+            <!-- Panel Kiri: Profil Kandidat -->
+            <div class="sm:w-1/3 p-2 sm:p-6 shadow-xl m-4 rounded-lg">
+                <div id="candidateProfile" class="text-center">
+                    <!-- Skeleton Loader -->
+                    <div id="profileSkeleton" class="animate-pulse">
+                        <div class="w-32 h-32 bg-gray-300 rounded-full mx-auto mb-4"></div>
+                        <div class="h-6 bg-gray-300 rounded mb-2"></div>
+                        <div class="h-4 bg-gray-300 rounded mb-4"></div>
+                    </div>
+                    <!-- Actual Content -->
+                    <img id="candidatePhoto" src="" alt="Foto kandidat"
+                        class="borrder sm:w-64 sm:h-48 w-48 h-32 rounded-lg mx-auto mb-4 object-cover hidden" loading="lazy">
+                    <h2 id="candidateName" class="text-2xl font-bold text-white hidden"></h2>
+                    <p id="candidateNumber" class="text-lg text-white mb-2 hidden">Kandidat </p>
+                    <!-- Tombol pilih dihapus -->
+                </div>
+            </div>
+
+            <!-- Panel Tengah: Visi & Misi -->
+            <div class="sm:w-2/3 edit-bg1 p-6 shadow-lg m-4 rounded-lg flex-1">
+                <h3 class="text-3xl font-bold text-white mb-4">Visi & Misi</h3>
+                <div id="visionMissionContent" class="max-h-20 sm:max-h-80 overflow-y-auto">
+                    <!-- Skeleton Loader -->
+                    <div id="vmSkeleton" class="animate-pulse space-y-4">
+                        <div class="h-4 bg-gray-300 rounded"></div>
+                        <div class="h-4 bg-gray-300 rounded"></div>
+                        <div class="h-4 bg-gray-300 rounded"></div>
+                        <div class="h-4 bg-gray-300 rounded"></div>
+                        <div class="h-4 bg-gray-300 rounded"></div>
+                    </div>
+                    <!-- Actual Content -->
+                    <div id="visionMissionText" class="leading-relaxed hidden">
+                        <p id="visionText"></p>
+                        <p id="missionText" class="mt-4 preserve-newlines" style="white-space: pre-wrap;"></p>
+                    </div>
+                </div>
+            </div>
+        </main>
+
+        <!-- Bar Bawah: Preview Kandidat Lain (Untuk navigasi ke detail kandidat lain) -->
+        <div class="p-4 shadow-lg rounded-lg">
+            <div id="candidateThumbnails" class="flex space-x-12 overflow-x-auto justify-center lg:justify-center">
+                <!-- Thumbnails akan di-render oleh JS -->
+            </div>
+        </div>
+    </div>
+    <!-- Footer -->
+    <footer class="bg-blue-900 mt-8 text-center text-white font-semibold py-4 text-sm opacity-60 sm:mt-auto md:mt-auto">
+      <!-- Tambahkan mt-auto untuk push ke bawah -->
+      © Coppyright KPU 2026. Dikembangkan oleh Panitia KPU(Samba).
+    </footer>
+
+    <!-- Script JS (Dimodifikasi dan disertakan inline) -->
+    <script>
+        // ====================
+        // VARIABEL UTAMA (Disalin dari script.js, tapi fokus pada kandidat saja)
+        // ====================
+        let candidates = [];
+        let activeCandidateId = null;
+
+        // ====================
+        // PELACAKAN KUNJUNGAN (Opsional, salin jika perlu)
+        // ====================
+
+        // Fungsi untuk menampilkan skeleton loader
+        function showSkeleton() {
+            const profileSkeleton = document.getElementById('profileSkeleton');
+            const vmSkeleton = document.getElementById('vmSkeleton');
+            if (profileSkeleton) profileSkeleton.classList.remove('hidden');
+            if (vmSkeleton) vmSkeleton.classList.remove('hidden');
+        }
+
+        // Fungsi untuk menyembunyikan skeleton loader
+        function hideSkeleton() {
+            const profileSkeleton = document.getElementById('profileSkeleton');
+            const vmSkeleton = document.getElementById('vmSkeleton');
+            if (profileSkeleton) profileSkeleton.classList.add('hidden');
+            if (vmSkeleton) vmSkeleton.classList.add('hidden');
+        }
+
+        // Fungsi untuk render profil kandidat aktif
+        function renderActiveCandidate(candidate) {
+            const candidatePhoto = document.getElementById('candidatePhoto');
+            const candidateName = document.getElementById('candidateName');
+            const candidateNumber = document.getElementById('candidateNumber');
+
+            if (candidatePhoto) {
+                candidatePhoto.src = candidate.foto_url;
+                candidatePhoto.classList.remove('hidden');
+            }
+            if (candidateName) {
+                candidateName.textContent = candidate.nama;
+                candidateName.classList.remove('hidden');
+            }
+            if (candidateNumber) {
+                candidateNumber.textContent = `Kandidat ${candidate.No}`;
+                candidateNumber.classList.remove('hidden');
+            }
+            // Tombol pilih dihapus
+        }
+
+        // Fungsi untuk render Visi & Misi
+        function renderVisionMission(candidate) {
+            const visionText = document.getElementById('visionText');
+            const missionText = document.getElementById('missionText');
+            const visionMissionText = document.getElementById('visionMissionText');
+
+            if (visionText) visionText.textContent = candidate.visi;
+            if (missionText) missionText.textContent = candidate.misi;
+            if (visionMissionText) visionMissionText.classList.remove('hidden');
+        }
+
+        // Fungsi untuk render thumbnails kandidat (Untuk navigasi)
+        function renderThumbnails() {
+            const container = document.getElementById('candidateThumbnails');
+            if (!container) return;
+            container.innerHTML = '';
+            candidates.forEach(candidate => {
+                const thumbnail = document.createElement('div');
+                thumbnail.className = `flex-shrink-0 w-20 h-20 rounded-lg overflow-hidden cursor-pointer transition-all duration-300 border-2 ${candidate.id === activeCandidateId ? 'border-blue-500 transform -translate-y-3 shadow-lg scale-120' : 'border-gray-300'}`;
+                thumbnail.innerHTML = `<img src="${candidate.foto_url}" alt="Foto kandidat ${candidate.nama}" class="w-full h-full object-cover" loading="lazy">`;
+                thumbnail.dataset.candidateId = candidate.id;
+                thumbnail.addEventListener('click', () => setActiveCandidate(candidate.id));
+                container.appendChild(thumbnail);
+            });
+        }
+
+        // Fungsi untuk mengatur kandidat aktif
+        function setActiveCandidate(id) {
+            const candidate = candidates.find(c => c.id === id);
+            if (!candidate) return;
+            activeCandidateId = id;
+            renderActiveCandidate(candidate);
+            renderVisionMission(candidate);
+            renderThumbnails();
+        }
+
+        // Fungsi untuk fetch data kandidat
+        async function fetchCandidates() {
+            try {
+                const { data, error } = await supabaseClient
+                    .from('kandidat')  // Tetap 'kandidat'
+                    .select('id, nama, No, foto_url, visi, misi')  // Ubah 'name' ke 'nama', 'number' ke 'No'
+                    .order('No');  // Ubah 'number' ke 'No'
+                if (error) throw error;
+                candidates = data;
+                // PERUBAHAN: Sinkronkan kandidatData dengan candidates untuk kompatibilitas
+                kandidatData = candidates;  // Pastikan kandidatData juga terisi
+                if (candidates.length > 0) {
+                    setActiveCandidate(activeCandidateId || candidates[0].id); // Set kandidat pertama sebagai aktif jika belum ada
+                }
+            } catch (error) {
+                console.error('Error fetching candidates:', error);
+                alert('Gagal memuat data kandidat. Silakan reload halaman.');
+            }
+        }
+
+        // ====================
+        // KONFIGURASI SUPABASE (Sama seperti asli)
+        // ====================
+        const SUPABASE_URL = 'https://xxwwbydzorlxulbcrldo.supabase.co';
+        const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Inh4d3dieWR6b3JseHVsYmNybGRvIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjExMDAxMDYsImV4cCI6MjA3NjY3NjEwNn0.La5nOg80azsQp_ZuqXuj0CI552hQBwdwWgxEqfaDlDk';
+        const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+        // Inisialisasi halaman
+        async function initVotingPage() {
+            showSkeleton();
+            activeCandidateId = null;  // PERUBAHAN: Reset activeCandidateId agar selalu default ke kandidat pertama
+            await fetchCandidates();  // Ini akan set kandidat pertama sebagai aktif
+            hideSkeleton();
+        }
+        // ====================
+        // LOGOUT
+        // ====================
+        function logout(buttonId) {
+            setLoadingState(buttonId, true);
+            setTimeout(() => {
+                // Redirect ke index.html atau halaman utama
+                window.location.href = '/kirim/index.html';
+                setLoadingState(buttonId, false);
+            }, 500);
+        }
+
+        // ====================
+        // FUNGSI LOADING STATE UNTUK TOMBOL
+        // ====================
+        function setLoadingState(buttonId, isLoading) {
+            const button = document.getElementById(buttonId);
+            if (!button) return;  // Jika tombol tidak ada, skip
+            const spinner = button.querySelector('.spinner');
+            if (isLoading) {
+                if (spinner) spinner.classList.remove('hidden');
+                button.disabled = true;
+            } else {
+                if (spinner) spinner.classList.add('hidden');
+                button.disabled = false;
+            }
+        }
+
+        // ====================
+        // EVENT LISTENER
+        // ====================
+        const logoutResultsBtn = document.getElementById("logoutResultsBtn");
+        if (logoutResultsBtn) logoutResultsBtn.addEventListener("click", (e) => logout(e.target.id));
+        initVotingPage();
+    </script>
+
+    <script type="module" src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"></script>
+    <script nomodule src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.js"></script>
+</body>
+
+</html>
