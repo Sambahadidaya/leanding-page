@@ -143,7 +143,7 @@ function logout(buttonId) {
     setLoadingState(buttonId, true);
     setTimeout(() => {
         // Redirect ke index.html atau halaman utama
-        window.location.href = '/kirim/index.html';
+        window.location.href = '/index.html';
         setLoadingState(buttonId, false);
     }, 500);
 }
@@ -160,3 +160,4 @@ if (logoutResultsBtn) logoutResultsBtn.addEventListener("click", (e) => logout(e
 document.addEventListener("DOMContentLoaded", () => {
     updateResults();  // Panggil langsung saat halaman load
 });
+
