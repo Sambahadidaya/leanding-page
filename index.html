@@ -54,12 +54,6 @@
             transform: translateY(0);
         }
 
-        .countdown-box {
-            /* background-color: #1C3D4D; */
-            background: linear-gradient(135deg, #4facfe70 0%, #00f1fe7c 100%);
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-        }
-
         .explore-item:hover {
             transform: scale(1.05);
             transition: transform 0.5s ease;
@@ -196,6 +190,12 @@
             cursor: pointer;
         }
 
+        .countdown-box {
+            /* background-color: #1C3D4D; */
+            background: linear-gradient(135deg, #4facfe70 0%, #00f1fe7c 100%);
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
         @media (max-width: 320px) {
             .hp-top {
                 margin-top: 80px;
@@ -223,12 +223,17 @@
                 flex-direction: column;
                 overflow: hidden;
             }
+
+            .padding1 {
+                padding: 1rem;
+            }
         }
 
         @media (min-width: 321px) {
             .hp-teks {
                 font-size: 1.8rem;
             }
+
             .chat-box {
                 position: fixed;
                 bottom: 90px;
@@ -247,6 +252,45 @@
                 margin-left: 20px;
                 /* sama seperti space-x-5 */
             }
+
+            .padding1 {
+                padding: 1rem;
+            }
+        }
+
+        @media (min-width: 640px) {
+            .hp-teks {
+                font-size: 1.8rem;
+            }
+
+            .chat-box {
+                position: fixed;
+                bottom: 90px;
+                right: 20px;
+                width: 310px;
+                height: 400px;
+                background: rgba(255, 255, 255, 0.411);
+                border-radius: 15px;
+                box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+                display: none;
+                flex-direction: column;
+                overflow: hidden;
+            }
+
+            .hp-space>*+* {
+                margin-left: 30px;
+                /* sama seperti space-x-5 */
+            }
+
+            .countdown-box {
+                /* background-color: #1C3D4D; */
+                background: linear-gradient(135deg, #4facfe70 0%, #00f1fe7c 100%);
+                box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            }
+
+            .padding1 {
+                padding: 2rem;
+            }
         }
     </style>
 </head>
@@ -255,7 +299,10 @@
     <!-- Navbar -->
     <nav id="navbar" class="fixed top-0 w-full z-50 glassmorphism shadow-lg transition-all duration-800">
         <div class="container mx-auto px-4 py-3 flex justify-between items-center">
-            <img src="lp3i.png" alt="Logo" class="h-12 md:h-14 bg-white rounded-full p-1">
+            <div class="flex items-center">
+                <img src="lp3i.png" alt="Logo" class="mr-4 h-12 md:h-14 bg-white rounded-full p-1">
+                <h1 class="font-bold md:text-xl">Politeknik LP3I</h1>
+            </div>
             <div class="hidden md:flex space-x-6">
                 <a href="#home" class="hover:text-blue-200 transition">Home</a>
                 <a href="#about" class="hover:text-blue-200 transition">About</a>
@@ -286,19 +333,19 @@
         </h1>
         <p class="text-lg md:text-xl mb-8">Pemilihan dimulai pada 1 Desember 2025 di Aula Kampus.</p>
         <div id="countdown" class="flex hp-space mb-8 md:space-x-8">
-            <div class="countdown-box rounded-xl p-4 text-center">
+            <div class="countdown-box rounded-xl pandding1 p-4 text-center">
                 <div class="text-2xl font-bold" id="days">00</div>
                 <div class="text-sm">Hari</div>
             </div>
-            <div class="countdown-box rounded-xl p-4 text-center">
+            <div class="countdown-box rounded-xl pandding1 p-4 text-center">
                 <div class="text-2xl font-bold" id="hours">00</div>
                 <div class="text-sm">Jam</div>
             </div>
-            <div class="countdown-box rounded-xl p-4 text-center">
+            <div class="countdown-box rounded-xl pandding1 p-4 text-center">
                 <div class="text-2xl font-bold" id="minutes">00</div>
                 <div class="text-sm">Menit</div>
             </div>
-            <div class="countdown-box rounded-xl p-4 text-center">
+            <div class="countdown-box rounded-xl pandding1 p-4 text-center">
                 <div class="text-2xl font-bold" id="seconds">00</div>
                 <div class="text-sm">Detik</div>
             </div>
@@ -335,20 +382,21 @@
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-8 justify-items-center items-center">
                 <div class="explore-item bg-white bg-opacity-10 rounded-xl p-4 shadow-lg">
                     <h1 class="font-semibold text-xl md:text-2xl mb-2">Panduan Cara Voting</h1>
-                    <img src="contoh1.png" alt="Contoh 1" class="w-full h-48 object-cover rounded-lg mb-4">
-                    <button onclick="window.location.href='tes.pdf'"
-                        class="bg-blue-100 hover:bg-blue-500 text-blue-900 hover:text-blue-100 font-semibold text-sm py-2 px-4 rounded-xl transition mr-4">Lihat
-                        PDF</button>
-                    <button onclick="window.location.href='cek.mp4'"
+                    <img src="panduan.png" alt="Contoh 1" class="w-full h-48 object-cover rounded-lg mb-4">
+                    <button onclick="window.location.href='Panduan Lengkap.pdf'"
+                        class="mb-2 bg-blue-100 hover:bg-blue-500 text-blue-900 hover:text-blue-100 font-semibold text-sm py-2 px-4 rounded-xl transition mr-4">Lihat
+                        Panduan Lenkap</button>
+                    <button onclick="window.location.href='cara voting.mp4'"
                         class="bg-blue-100 hover:bg-blue-500 text-blue-900 hover:text-blue-100 font-semibold text-sm py-2 px-4 rounded-xl transition">Lihat
                         video</button>
                 </div>
                 <div class="explore-item bg-white bg-opacity-10 rounded-xl p-4 shadow-lg">
                     <h1 class="font-semibold text-xl md:text-2xl mb-2">Dokumentasi Acara</h1>
-                    <img src="contoh1.png" alt="Contoh 1" class="w-full h-48 object-cover rounded-lg mb-4">
-                    <button onclick="window.location.href='#explore'"
-                        class="bg-blue-100 hover:bg-blue-500 text-blue-900 hover:text-blue-100 font-semibold text-sm py-2 px-4 rounded-xl transition mr-4">Lihat
-                        Halaman</button>
+                    <img src="dokumentasi.png" alt="Contoh 1" class="w-full h-48 object-cover rounded-lg mb-4">
+                    <button
+                        onclick="window.location.href='https://drive.google.com/drive/folders/1NCJeUeChKD7V82MLt-O82uggBeKZ1tzU?usp=sharing'"
+                        class="bg-blue-100 hover:bg-blue-500 text-blue-900 hover:text-blue-100 font-semibold text-sm py-2 px-4 rounded-xl transition mr-4">Buka
+                        Google Drive</button>
                 </div>
             </div>
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 justify-items-center items-center mt-8">
@@ -361,7 +409,7 @@
                 </div>
                 <div class="explore-item bg-white bg-opacity-10 rounded-xl p-4 shadow-lg">
                     <h1 class="font-semibold text-xl md:text-2xl mb-2">Hasil Sementara</h1>
-                    <img src="contoh1.png" alt="Contoh 1" class="w-full h-48 object-cover rounded-lg mb-4">
+                    <img src="hasil.png" alt="Contoh 1" class="w-full h-48 object-cover rounded-lg mb-4">
                     <button onclick="window.location.href='results/index.html'"
                         class="bg-blue-100 hover:bg-blue-500 text-blue-900 hover:text-blue-100 font-semibold text-sm py-2 px-4 rounded-xl transition mr-4">Lihat
                         Halaman</button>
@@ -369,7 +417,7 @@
                 <div class="explore-item bg-white bg-opacity-10 rounded-xl p-4 shadow-lg">
                     <h1 class="font-semibold text-xl md:text-2xl mb-2">Detail Kandidat</h1>
                     <img src="contoh1.png" alt="Contoh 1" class="w-full h-48 object-cover rounded-lg mb-4">
-                    <button onclick="window.location.href='#explore'"
+                    <button onclick="window.location.href='kandidat/index.html'"
                         class="bg-blue-100 hover:bg-blue-500 text-blue-900 hover:text-blue-100 font-semibold text-sm py-2 px-4 rounded-xl transition mr-4">Lihat
                         Halaman</button>
                 </div>
@@ -431,7 +479,7 @@
     <footer class="bg-blue-900 text-sm opacity-60 py-4 text-center">
         <p>&copy; Coppyright KPU 2026. Dikembangkan oleh Panitia KPU. </p>
     </footer>
-
+    <!-- Footer -->
     <!-- CHAT BUBBLE -->
     <div class="chat-bubble" id="chatBubble">💬</div>
 
@@ -455,5 +503,3 @@
 </body>
 
 </html>
-
-
