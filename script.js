@@ -4,18 +4,34 @@ const chatBox = document.getElementById("chatBox");
 const chatContent = document.getElementById("chatContent");
 const input = document.getElementById("chatInput");
 const sendBtn = document.getElementById("sendBtn");
+const chatSpinner = document.getElementById("chatSpinner");
+
+// Cek apakah greeting sudah dikirim dalam sesi ini (gunakan sessionStorage untuk persist selama tab aktif)
+let greetingSent = sessionStorage.getItem('chatGreetingSent') === 'true';
 
 // Toggle chat box
 chatBubble.addEventListener("click", () => {
-    chatBox.style.display = (chatBox.style.display === "flex") ? "none" : "flex";
+    const isOpening = chatBox.style.display === "none" || chatBox.style.display === "";
+    chatBox.style.display = isOpening ? "flex" : "none";
 
+    // Jika pertama kali membuka chat dalam sesi ini dan belum pernah dikirim greeting
+    if (isOpening && !greetingSent) {
+        setTimeout(() => {
+            addMessage("haii apakah ada yang bisa saya bantu? silahkan ketik atau salin kata 'LIST' maka akan saya kirim list pertanyaan yang sudah disiapkan", "bot");
+            greetingSent = true;
+            sessionStorage.setItem('chatGreetingSent', 'true');
+        }, 500); // Delay sedikit untuk efek
+    }
 });
 
 // Fungsi untuk menambah pesan ke chat
 function addMessage(text, sender) {
     const div = document.createElement("div");
     div.classList.add("msg", sender);
-    div.textContent = text;
+
+    // newline → <br>
+    div.innerHTML = text.replace(/\n/g, "<br>");
+
     chatContent.appendChild(div);
     chatContent.scrollTop = chatContent.scrollHeight;
 }
@@ -29,13 +45,12 @@ async function sendToN8n(message) {
             body: JSON.stringify({ message })  // Sesuaikan dengan format yang diharapkan n8n
         });
         const text = await response.text();
-        return text || "Maaf, terjadi kesalahan.";  // Asumsi respons dari n8n adalah { "response": "teks" }
+        return text || "Aduh error";  // Asumsi respons dari n8n adalah { "response": "teks" }
     } catch (error) {
         console.error('Error:', error);
         return "Maaf, chatbot sedang offline.";
     }
 }
-
 
 // Event kirim pesan
 sendBtn.addEventListener("click", async () => {
@@ -45,9 +60,19 @@ sendBtn.addEventListener("click", async () => {
     // Pesan user
     addMessage(text, "user");
 
+    // Tampilkan spinner loading
+    chatSpinner.classList.remove('hidden');
+    input.disabled = true;
+    sendBtn.disabled = true;
+
     // Kirim ke n8n dan tunggu respons
     const botResponse = await sendToN8n(text);
     addMessage(botResponse, "bot");
+
+    // Sembunyikan spinner
+    chatSpinner.classList.add('hidden');
+    input.disabled = false;
+    sendBtn.disabled = false;
 
     input.value = "";
 });
@@ -103,7 +128,7 @@ document.getElementById('hamburger').addEventListener('click', () => {
 
 // Countdown timer to December 1, 2025
 function updateCountdown() {
-    const targetDate = new Date('2025-12-01T00:00:00').getTime();
+    const targetDate = new Date('2025-12-01T07:00:00').getTime();
     const now = new Date().getTime();
     const distance = targetDate - now;
 
