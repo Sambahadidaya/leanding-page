@@ -183,7 +183,16 @@
         }
 
         .chat-input button {
+            margin-left: -50px;
             background: #0e76a8;
+            border: none;
+            padding: 10px 15px;
+            color: rgba(255, 255, 255, 0.541);
+            cursor: pointer;
+        }
+        .chat-input button:hover {
+            margin-left: -50px;
+            background: #000000;
             border: none;
             padding: 10px 15px;
             color: rgba(255, 255, 255, 0.541);
@@ -331,7 +340,7 @@
         <h1 class="hp-teks md:text-5xl font-bold mb-4">Selamat Datang <br>Di Pemilihan Presiden Mahasiswa Periode
             <br>2025-2026
         </h1>
-        <p class="text-lg md:text-xl mb-8">Pemilihan dimulai pada 1 Desember 2025 di Aula Kampus.</p>
+        <p class="text-lg md:text-xl mb-8">Pemilihan dimulai pada 1 Desember 2025 Pukul 07.00WIB-15.00WIB.</p>
         <div id="countdown" class="flex hp-space mb-8 md:space-x-8">
             <div class="countdown-box rounded-xl pandding1 p-4 text-center">
                 <div class="text-2xl font-bold" id="days">00</div>
@@ -414,9 +423,9 @@
                         class="bg-blue-100 hover:bg-blue-500 text-blue-900 hover:text-blue-100 font-semibold text-sm py-2 px-4 rounded-xl transition mr-4">Lihat
                         Halaman</button>
                 </div>
-                <div class="explore-item bg-white bg-opacity-10 rounded-xl p-4 shadow-lg">
+                                <div class="explore-item bg-white bg-opacity-10 rounded-xl p-4 shadow-lg">
                     <h1 class="font-semibold text-xl md:text-2xl mb-2">Detail Kandidat</h1>
-                    <img src="contoh1.png" alt="Contoh 1" class="w-full h-48 object-cover rounded-lg mb-4">
+                    <img src="kandidat.png" alt="Contoh 1" class="w-full h-48 object-cover rounded-lg mb-4">
                     <button onclick="window.location.href='kandidat/index.html'"
                         class="bg-blue-100 hover:bg-blue-500 text-blue-900 hover:text-blue-100 font-semibold text-sm py-2 px-4 rounded-xl transition mr-4">Lihat
                         Halaman</button>
@@ -451,7 +460,8 @@
     <!-- Section 5: Contact -->
     <section id="contact" class="py-20 px-4 fade-in">
         <div class="container mx-auto max-w-md md:max-w-full md:mt-6">
-            <h2 class="hp-teks md:text-3xl font-bold mb-8 text-center">Hubungi Kami</h2>
+            <h2 class="hp-teks md:text-4xl font-bold mb-2 text-center">Hubungi Kami</h2>
+            <h2 class="text-sm md:text-lg font-semibold mb-8 text-center">Apabila ada yang ingin ditanyakan, bisa menggunakan live chat</h2>
             <form id="contact-form" class="space-y-4 md:space-y-4 bg-white bg-opacity-10 rounded-xl p-8 shadow-lg">
                 <input type="text" id="nama" placeholder="Nama"
                     class="w-full p-3 md:p-2 rounded-xl bg-white bg-opacity-10 border border-blue-300" required>
@@ -469,15 +479,13 @@
             <div class="mt-4 text-center space-x-4">
                 <a href="https://instagram.com/kpu" target="_blank" class="text-blue-100 hover:text-[#00f1fe7c]"
                     rel="noopener">Instagram KPU</a>
-                <a href="https://wa.me/+6285942151639" target="_blank" class="text-blue-100 hover:text-[#00f1fe7c]"
-                    rel="noopener">Whatsapp KPU</a>
             </div>
         </div>
     </section>
 
     <!-- Footer -->
     <footer class="bg-blue-900 text-sm opacity-60 py-4 text-center">
-        <p>&copy; Coppyright KPU 2026. Dikembangkan oleh Panitia KPU. </p>
+        <p>&copy; Coppyright KPU 2026. Dikembangkan oleh Panitia KPU(Samba). </p>
     </footer>
     <!-- Footer -->
     <!-- CHAT BUBBLE -->
@@ -494,6 +502,7 @@
 
         <div class="chat-input">
             <input type="text" id="chatInput" placeholder="Tulis pesan...">
+            <span class="spinner hidden" id="chatSpinner"></span>
             <button id="sendBtn">Kirim</button>
         </div>
 
