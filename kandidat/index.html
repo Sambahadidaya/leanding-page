@@ -191,11 +191,13 @@
     <div id="detailPage" class="min-h-screen animate-fade-in">
         <!-- Header (Disalin dari votingPage, tapi tanpa logout jika tidak perlu; atau sesuaikan) -->
         <header class="bg-[#01010138] shadow-md p-4 flex justify-between items-center">
-            <span class="text-sm sm:text-lg md:text-xl text-center text-[#F2F8F6] font-bold">Detail Kandidat</span>
+            <span class="text-lg sm:text-lg md:text-xl text-center text-[#F2F8F6] font-bold hideen"></span>
+            <span class="text-lg sm:text-lg md:text-2xl text-center text-[#F2F8F6] font-bold">Detail Kandidat</span>
             <!-- Opsional: Tambahkan tombol kembali atau navigasi -->
             <div class="flex items-center space-x-4">
                 <button onclick="logout()" id="logoutResultsBtn"
-                    class="borrder-tombol2 px-2 py-1 sm:px-4 sm:py-2 md:px-4 md:py-2 rounded-lg transition-colors duration-200">Kembali</button>
+                    class="borrder-tombol2 px-2 py-1 sm:px-4 sm:py-2 md:px-4 md:py-2 rounded-lg transition-colors duration-200">
+                    <span class="spinner hidden"></span>Kembali</button>
             </div>
         </header>
 
@@ -212,17 +214,16 @@
                     </div>
                     <!-- Actual Content -->
                     <img id="candidatePhoto" src="" alt="Foto kandidat"
-                        class="borrder sm:w-64 sm:h-48 w-48 h-32 rounded-lg mx-auto mb-4 object-cover hidden" loading="lazy">
-                    <h2 id="candidateName" class="text-2xl font-bold text-white hidden"></h2>
-                    <p id="candidateNumber" class="text-lg text-white mb-2 hidden">Kandidat </p>
+                        class="edit-bg1 sm:w-64 sm:h-48 w-48 h-32 rounded-lg mx-auto mb-4 object-cover hidden" loading="lazy">
+                    <h2 id="candidateName" style="white-space: pre-wrap;" class="text-2xl font-bold text-white mb-2 hidden"></h2>
+                    <p id="candidateNumber" class="text-lg text-white mb-2 hidden">Paslon No, </p>
                     <!-- Tombol pilih dihapus -->
                 </div>
             </div>
 
             <!-- Panel Tengah: Visi & Misi -->
             <div class="sm:w-2/3 edit-bg1 p-6 shadow-lg m-4 rounded-lg flex-1">
-                <h3 class="text-3xl font-bold text-white mb-4">Visi & Misi</h3>
-                <div id="visionMissionContent" class="max-h-20 sm:max-h-80 overflow-y-auto">
+                <div id="visionMissionContent" class="p-2 max-h-40 sm:max-h-80 overflow-y-auto">
                     <!-- Skeleton Loader -->
                     <div id="vmSkeleton" class="animate-pulse space-y-4">
                         <div class="h-4 bg-gray-300 rounded"></div>
@@ -233,7 +234,9 @@
                     </div>
                     <!-- Actual Content -->
                     <div id="visionMissionText" class="leading-relaxed hidden">
+                        <h3 class="text-3xl font-bold text-white mb-4">Visi</h3>
                         <p id="visionText"></p>
+                        <h3 class="text-3xl font-bold text-white mb-4 mt-4">Misi</h3>
                         <p id="missionText" class="mt-4 preserve-newlines" style="white-space: pre-wrap;"></p>
                     </div>
                 </div>
@@ -296,7 +299,7 @@
                 candidateName.classList.remove('hidden');
             }
             if (candidateNumber) {
-                candidateNumber.textContent = `Kandidat ${candidate.No}`;
+                candidateNumber.textContent = `Paslon No. ${candidate.No}`;
                 candidateNumber.classList.remove('hidden');
             }
             // Tombol pilih dihapus
@@ -365,6 +368,7 @@
         const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Inh4d3dieWR6b3JseHVsYmNybGRvIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjExMDAxMDYsImV4cCI6MjA3NjY3NjEwNn0.La5nOg80azsQp_ZuqXuj0CI552hQBwdwWgxEqfaDlDk';
         const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
+        
         // Inisialisasi halaman
         async function initVotingPage() {
             showSkeleton();
