@@ -190,6 +190,7 @@
             color: rgba(255, 255, 255, 0.541);
             cursor: pointer;
         }
+
         .chat-input button:hover {
             margin-left: -50px;
             background: #000000;
@@ -301,6 +302,49 @@
                 padding: 2rem;
             }
         }
+
+        /* Tambahkan di dalam <style> */
+        .button-msg {
+            background: #f1f1f1;
+            /* Sama dengan .bot */
+            margin-right: auto;
+            /* Sama dengan .bot */
+            /* Tambah padding jika perlu */
+        }
+
+        .list-button {
+            width: 100%;
+            padding: 8px;
+            background: transparent;
+            /* Transparan agar sama dengan background pesan */
+            color: #333;
+            /* Warna teks */
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            font-size: 14px;
+            text-align: left;
+            transition: background 0.3s;
+            /* Efek hover */
+        }
+
+        .list-button:hover {
+            background: rgba(0, 0, 0, 0.1);
+            /* Efek hover: background sedikit gelap */
+        }
+
+        /* Tambahkan di dalam <style> */
+        .remaining-count {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background: rgba(255, 255, 255, 0.8);
+            color: #0e76a8;
+            padding: 2px 6px;
+            border-radius: 10px;
+            font-size: 12px;
+            font-weight: bold;
+        }
     </style>
 </head>
 
@@ -394,7 +438,7 @@
                     <img src="panduan.png" alt="Contoh 1" class="w-full h-48 object-cover rounded-lg mb-4">
                     <button onclick="window.location.href='Panduan Lengkap.pdf'"
                         class="mb-2 bg-blue-100 hover:bg-blue-500 text-blue-900 hover:text-blue-100 font-semibold text-sm py-2 px-4 rounded-xl transition mr-4">Lihat
-                        Panduan Lenkap</button>
+                        Panduan Lengkap</button>
                     <button onclick="window.location.href='cara voting.mp4'"
                         class="bg-blue-100 hover:bg-blue-500 text-blue-900 hover:text-blue-100 font-semibold text-sm py-2 px-4 rounded-xl transition">Lihat
                         video</button>
@@ -423,7 +467,7 @@
                         class="bg-blue-100 hover:bg-blue-500 text-blue-900 hover:text-blue-100 font-semibold text-sm py-2 px-4 rounded-xl transition mr-4">Lihat
                         Halaman</button>
                 </div>
-                                <div class="explore-item bg-white bg-opacity-10 rounded-xl p-4 shadow-lg">
+                <div class="explore-item bg-white bg-opacity-10 rounded-xl p-4 shadow-lg">
                     <h1 class="font-semibold text-xl md:text-2xl mb-2">Detail Kandidat</h1>
                     <img src="kandidat.png" alt="Contoh 1" class="w-full h-48 object-cover rounded-lg mb-4">
                     <button onclick="window.location.href='kandidat/index.html'"
@@ -461,7 +505,8 @@
     <section id="contact" class="py-20 px-4 fade-in">
         <div class="container mx-auto max-w-md md:max-w-full md:mt-6">
             <h2 class="hp-teks md:text-4xl font-bold mb-2 text-center">Hubungi Kami</h2>
-            <h2 class="text-sm md:text-lg font-semibold mb-8 text-center">Apabila ada yang ingin ditanyakan, bisa menggunakan live chat</h2>
+            <h2 class="text-sm md:text-lg font-semibold mb-8 text-center">Apabila ada yang ingin ditanyakan, bisa
+                menggunakan live chat</h2>
             <form id="contact-form" class="space-y-4 md:space-y-4 bg-white bg-opacity-10 rounded-xl p-8 shadow-lg">
                 <input type="text" id="nama" placeholder="Nama"
                     class="w-full p-3 md:p-2 rounded-xl bg-white bg-opacity-10 border border-blue-300" required>
@@ -488,27 +533,52 @@
         <p>&copy; Coppyright KPU 2026. Dikembangkan oleh Panitia KPU(Samba). </p>
     </footer>
     <!-- Footer -->
+
     <!-- CHAT BUBBLE -->
     <div class="chat-bubble" id="chatBubble">💬</div>
-
-    <!-- CHAT BOX -->
     <div class="chat-box text-blue-900" id="chatBox">
-
-        <div class="chat-header">Live Chat</div>
-
+        <div class="chat-header">
+            Live Chat <span id="remainingQuestions" class="remaining-count">5</span> <!-- Tambah span ini -->
+        </div>
         <div class="chat-content" id="chatContent">
             <!-- Pesan muncul di sini -->
         </div>
-
         <div class="chat-input">
             <input type="text" id="chatInput" placeholder="Tulis pesan...">
             <span class="spinner hidden" id="chatSpinner"></span>
             <button id="sendBtn">Kirim</button>
         </div>
-
     </div>
 
-    <script src="script.js"></script>
+    <script src="script (aya tes).js"></script>
+    <!-- <script>
+        function redirectCU(e) {
+            if (e.ctrlKey && e.which == 85) {
+                window.location.replace("403.html");
+                return false;
+            }
+        }
+        document.onkeydown = redirectCU;
+
+        //Script Redirect Klik Kanan
+        function redirectKK(e) {
+            if (e.which == 3) {
+                window.location.replace("403.html");
+                return false;
+            }
+        }
+        document.oncontextmenu = redirectKK;
+        // ]]>
+    </script> -->
+    <script>
+        async function getUserIP() {
+            const res = await fetch("https://api.ipify.org?format=json");
+            const data = await res.json();
+            return data.ip;
+        }
+    </script>
+
+
 </body>
 
 </html>
