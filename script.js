@@ -5,24 +5,93 @@ const chatContent = document.getElementById("chatContent");
 const input = document.getElementById("chatInput");
 const sendBtn = document.getElementById("sendBtn");
 const chatSpinner = document.getElementById("chatSpinner");
+const remainingQuestions = document.getElementById("remainingQuestions"); // Elemen baru
+
+// Konstanta untuk limit
+const MAX_MESSAGES_PER_HOUR = 2; // 5 pesan per jam (sliding window 1 jam)
+
+// Pesan respons list pertanyaan (dari bot setelah klik tombol)
+const LIST_RESPONSE = "Berikut daftar pertanyaan yang sudah disiapkan ; \n" +
+    "1. Kapan jadwal pembukaan dan penutupan voting?\n" +
+    "2. Bagaimana akses sebelum atau sesudah waktu voting?\n" +
+    "3. Siapa peserta online dan offline?\n" +
+    "4. Apa persiapan pemilih?\n" +
+    "5. Di mana lokasi offline?" +
+    "Pastikan kata yang dikirim sesuai dengan yang disediakan tadi, apabila ada yang salah maka saya tidak bisa merespon.";
 
 // Cek apakah greeting sudah dikirim dalam sesi ini (gunakan sessionStorage untuk persist selama tab aktif)
 let greetingSent = sessionStorage.getItem('chatGreetingSent') === 'true';
 
+// Fungsi untuk update angka sisa kesempatan
+async function updateRemainingQuestions() {
+    const userIP = await getUserIP();
+    if (!userIP) {
+        remainingQuestions.textContent = MAX_MESSAGES_PER_HOUR; // Default jika IP gagal didapat
+        return;
+    }
+
+    // Dapatkan waktu saat ini dalam WIB (Asia/Jakarta)
+    const now = new Date();
+    const jakartaTime = new Date(now.toLocaleString("en-US", {timeZone: "Asia/Jakarta"}));
+    const oneHourAgo = new Date(jakartaTime.getTime() - 60 * 60 * 1000); // 1 jam lalu
+
+    try {
+        const selectResponse = await fetch(`${SUPABASE_URL}/rest/v1/chat_limits?ip=eq.${userIP}&timestamp=gte.${oneHourAgo.toISOString()}`, {
+            method: 'GET',
+            headers: {
+                'apikey': SUPABASE_ANON_KEY,
+                'Authorization': `Bearer ${SUPABASE_ANON_KEY}`
+            }
+        });
+        const records = await selectResponse.json();
+        const currentCount = records.length;
+        const remaining = Math.max(0, MAX_MESSAGES_PER_HOUR - currentCount);
+        remainingQuestions.textContent = remaining;
+    } catch (error) {
+        console.error('Error updating remaining questions:', error);
+        remainingQuestions.textContent = MAX_MESSAGES_PER_HOUR; // Fallback
+    }
+}
+
 // Toggle chat box
-chatBubble.addEventListener("click", () => {
+chatBubble.addEventListener("click", async () => {
     const isOpening = chatBox.style.display === "none" || chatBox.style.display === "";
     chatBox.style.display = isOpening ? "flex" : "none";
 
-    // Jika pertama kali membuka chat dalam sesi ini dan belum pernah dikirim greeting
-    if (isOpening && !greetingSent) {
-        setTimeout(() => {
-            addMessage("haii apakah ada yang bisa saya bantu? silahkan ketik atau salin kata 'LIST' maka akan saya kirim list pertanyaan yang sudah disiapkan", "bot");
-            greetingSent = true;
-            sessionStorage.setItem('chatGreetingSent', 'true');
-        }, 500); // Delay sedikit untuk efek
+    if (isOpening) {
+        // Update angka sisa saat chat dibuka
+        await updateRemainingQuestions();
+
+        // Jika pertama kali membuka chat dalam sesi ini dan belum pernah dikirim greeting
+        if (!greetingSent) {
+            setTimeout(() => {
+                addMessage("haii apakah ada yang bisa saya bantu? silahkan ketik atau salin kata 'LIST' maka akan saya kirim list pertanyaan yang sudah disiapkan", "bot");
+                // Tambahkan respons kedua (tombol) setelah greeting
+                setTimeout(() => addButtonMessage(), 100); // Delay kecil untuk efek berturut-turut
+                greetingSent = true;
+                sessionStorage.setItem('chatGreetingSent', 'true');
+            }, 500); // Delay sedikit untuk efek
+        }
     }
 });
+
+// Fungsi untuk membuat respons kedua: tombol sebagai pesan bot
+function addButtonMessage() {
+    const div = document.createElement("div");
+    div.classList.add("msg", "bot", "button-msg"); // Sama dengan bot, tapi tambah class untuk styling
+
+    const button = document.createElement("button");
+    button.innerHTML = "→ list pertanyaan";
+    button.classList.add("list-button");
+    button.addEventListener("click", () => {
+        // Langsung respons bot dengan list pertanyaan (tanpa pesan user)
+        addMessage(LIST_RESPONSE, "bot");
+    });
+
+    div.appendChild(button);
+    chatContent.appendChild(div);
+    chatContent.scrollTop = chatContent.scrollHeight;
+}
 
 // Fungsi untuk menambah pesan ke chat
 function addMessage(text, sender) {
@@ -34,6 +103,64 @@ function addMessage(text, sender) {
 
     chatContent.appendChild(div);
     chatContent.scrollTop = chatContent.scrollHeight;
+}
+
+// Fungsi untuk mendapatkan IP pengguna (menggunakan API eksternal)
+async function getUserIP() {
+    try {
+        const response = await fetch('https://api.ipify.org?format=json');
+        const data = await response.json();
+        return data.ip;
+    } catch (error) {
+        console.error('Error getting IP:', error);
+        return null; // Jika gagal, kembalikan null
+    }
+}
+
+// Fungsi untuk mengecek dan memperbarui limit di Supabase (sliding window 1 jam)
+async function checkAndUpdateLimit(ip) {
+    // Dapatkan waktu saat ini dalam WIB (Asia/Jakarta)
+    const now = new Date();
+    const jakartaTime = new Date(now.toLocaleString("en-US", {timeZone: "Asia/Jakarta"}));
+    const oneHourAgo = new Date(jakartaTime.getTime() - 60 * 60 * 1000); // 1 jam lalu
+
+    try {
+        // Query records dalam 1 jam terakhir
+        const selectResponse = await fetch(`${SUPABASE_URL}/rest/v1/chat_limits?ip=eq.${ip}&timestamp=gte.${oneHourAgo.toISOString()}`, {
+            method: 'GET',
+            headers: {
+                'apikey': SUPABASE_ANON_KEY,
+                'Authorization': `Bearer ${SUPABASE_ANON_KEY}`
+            }
+        });
+        const records = await selectResponse.json();
+
+        if (records.length >= MAX_MESSAGES_PER_HOUR) {
+            // Hitung waktu kembalinya: timestamp tertua + 1 jam
+            const sortedRecords = records.sort((a, b) => new Date(a.timestamp) - new Date(b.timestamp));
+            const oldestTimestamp = sortedRecords[0].timestamp;
+            const nextTime = new Date(oldestTimestamp);
+            nextTime.setHours(nextTime.getHours() + 1);
+            const nextTimeString = nextTime.toLocaleString("id-ID", { hour: '2-digit', minute: '2-digit', timeZone: 'Asia/Jakarta' }); // Format: HH.MM WIB
+            return { allowed: false, message: `Anda telah mencapai batas ${MAX_MESSAGES_PER_HOUR} pesan per jam. Coba lagi pada jam ${nextTimeString} WIB.` };
+        } else {
+            // Insert record baru dengan timestamp saat ini
+            const insertResponse = await fetch(`${SUPABASE_URL}/rest/v1/chat_limits`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'apikey': SUPABASE_ANON_KEY,
+                    'Authorization': `Bearer ${SUPABASE_ANON_KEY}`
+                },
+                body: JSON.stringify({ ip, timestamp: jakartaTime.toISOString() })
+            });
+            if (!insertResponse.ok) throw new Error('Insert failed');
+            return { allowed: true };
+        }
+    } catch (error) {
+        console.error('Error checking/updating limit:', error);
+        return { allowed: false, message: 'Terjadi kesalahan saat memeriksa limit. Coba lagi nanti.' };
+    }
 }
 
 // Fungsi untuk mengirim pesan ke n8n
@@ -52,12 +179,26 @@ async function sendToN8n(message) {
     }
 }
 
-// Event kirim pesan
+// Event kirim pesan (dimodifikasi untuk cek limit)
 sendBtn.addEventListener("click", async () => {
     const text = input.value.trim();
     if (!text) return;
 
-    // Pesan user
+    // Dapatkan IP pengguna
+    const userIP = await getUserIP();
+    if (!userIP) {
+        addMessage("Tidak dapat mendapatkan IP Anda. Pastikan koneksi internet stabil.", "bot");
+        return;
+    }
+
+    // Cek dan update limit
+    const limitCheck = await checkAndUpdateLimit(userIP);
+    if (!limitCheck.allowed) {
+        addMessage(limitCheck.message, "bot");
+        return;
+    }
+
+    // Jika allowed, lanjutkan kirim pesan
     addMessage(text, "user");
 
     // Tampilkan spinner loading
@@ -68,6 +209,12 @@ sendBtn.addEventListener("click", async () => {
     // Kirim ke n8n dan tunggu respons
     const botResponse = await sendToN8n(text);
     addMessage(botResponse, "bot");
+
+    // Tambahkan respons kedua (tombol) setelah respons pertama
+    setTimeout(() => addButtonMessage(), 500); // Delay untuk efek berturut-turut
+
+    // Update angka sisa setelah pesan dikirim
+    await updateRemainingQuestions();
 
     // Sembunyikan spinner
     chatSpinner.classList.add('hidden');
@@ -219,8 +366,8 @@ document.querySelectorAll('.fade-in').forEach(el => observer.observe(el));
 
 // Contact form submission to Supabase
 // Note: Replace with your actual Supabase URL and anon key
-const SUPABASE_URL = 'https://xxwwbydzorlxulbcrldo.supabase.co'; // Placeholder: Ganti dengan URL Supabase Anda
-const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Inh4d3dieWR6b3JseHVsYmNybGRvIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjExMDAxMDYsImV4cCI6MjA3NjY3NjEwNn0.La5nOg80azsQp_ZuqXuj0CI552hQBwdwWgxEqfaDlDk'; // Placeholder: Ganti dengan Anon Key Supabase Anda
+const SUPABASE_URL = 'https://wrcnffxdlqjfpoaosont.supabase.co'; // Placeholder: Ganti dengan URL Supabase Anda
+const SUPABASE_ANON_KEY = 'sb_publishable_dzpFnXYmgdYQxUnSzT-vZw_KRt8mD_v'; // Placeholder: Ganti dengan Anon Key Supabase Anda
 const supabase = {
     from: (table) => ({
         insert: (data) => fetch(`${SUPABASE_URL}/rest/v1/${table}`, {
