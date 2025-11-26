@@ -1,4 +1,4 @@
-// chatbotAI dengan n8n
+/// chatbotAI dengan n8n
 const chatBubble = document.getElementById("chatBubble");
 const chatBox = document.getElementById("chatBox");
 const chatContent = document.getElementById("chatContent");
@@ -22,11 +22,27 @@ const LIST_RESPONSE = "Berikut daftar pertanyaan yang sudah disiapkan ; \n" +
 // Cek apakah greeting sudah dikirim dalam sesi ini (gunakan sessionStorage untuk persist selama tab aktif)
 let greetingSent = sessionStorage.getItem('chatGreetingSent') === 'true';
 
+// Fungsi untuk mendapatkan ID unik pengguna dari localStorage (berbasis device/browser)
+function getUserID() {
+    let userID = localStorage.getItem('chatUserID');
+    if (!userID) {
+        // Generate UUID baru jika belum ada
+        if (typeof crypto !== 'undefined' && crypto.randomUUID) {
+            userID = crypto.randomUUID();
+        } else {
+            // Fallback untuk browser lama (kurang unik, tapi cukup)
+            userID = 'user-' + Date.now() + '-' + Math.random().toString(36).substr(2, 9);
+        }
+        localStorage.setItem('chatUserID', userID);
+    }
+    return userID;
+}
+
 // Fungsi untuk update angka sisa kesempatan
 async function updateRemainingQuestions() {
-    const userIP = await getUserIP();
-    if (!userIP) {
-        remainingQuestions.textContent = MAX_MESSAGES_PER_HOUR; // Default jika IP gagal didapat
+    const userID = getUserID();
+    if (!userID) {
+        remainingQuestions.textContent = MAX_MESSAGES_PER_HOUR; // Default jika ID gagal didapat
         return;
     }
 
@@ -36,7 +52,7 @@ async function updateRemainingQuestions() {
     const oneHourAgo = new Date(jakartaTime.getTime() - 60 * 60 * 1000); // 1 jam lalu
 
     try {
-        const selectResponse = await fetch(`${SUPABASE_URL}/rest/v1/chat_limits?ip=eq.${userIP}&timestamp=gte.${oneHourAgo.toISOString()}`, {
+        const selectResponse = await fetch(`${SUPABASE_URL}/rest/v1/chat_limits?user_id=eq.${userID}&timestamp=gte.${oneHourAgo.toISOString()}`, {
             method: 'GET',
             headers: {
                 'apikey': SUPABASE_ANON_KEY,
@@ -105,20 +121,8 @@ function addMessage(text, sender) {
     chatContent.scrollTop = chatContent.scrollHeight;
 }
 
-// Fungsi untuk mendapatkan IP pengguna (menggunakan API eksternal)
-async function getUserIP() {
-    try {
-        const response = await fetch('https://api.ipify.org?format=json');
-        const data = await response.json();
-        return data.ip;
-    } catch (error) {
-        console.error('Error getting IP:', error);
-        return null; // Jika gagal, kembalikan null
-    }
-}
-
 // Fungsi untuk mengecek dan memperbarui limit di Supabase (sliding window 1 jam)
-async function checkAndUpdateLimit(ip) {
+async function checkAndUpdateLimit(id) {
     // Dapatkan waktu saat ini dalam WIB (Asia/Jakarta)
     const now = new Date();
     const jakartaTime = new Date(now.toLocaleString("en-US", {timeZone: "Asia/Jakarta"}));
@@ -126,7 +130,7 @@ async function checkAndUpdateLimit(ip) {
 
     try {
         // Query records dalam 1 jam terakhir
-        const selectResponse = await fetch(`${SUPABASE_URL}/rest/v1/chat_limits?ip=eq.${ip}&timestamp=gte.${oneHourAgo.toISOString()}`, {
+        const selectResponse = await fetch(`${SUPABASE_URL}/rest/v1/chat_limits?user_id=eq.${id}&timestamp=gte.${oneHourAgo.toISOString()}`, {
             method: 'GET',
             headers: {
                 'apikey': SUPABASE_ANON_KEY,
@@ -152,7 +156,7 @@ async function checkAndUpdateLimit(ip) {
                     'apikey': SUPABASE_ANON_KEY,
                     'Authorization': `Bearer ${SUPABASE_ANON_KEY}`
                 },
-                body: JSON.stringify({ ip, timestamp: jakartaTime.toISOString() })
+                body: JSON.stringify({ user_id: id, timestamp: jakartaTime.toISOString() })
             });
             if (!insertResponse.ok) throw new Error('Insert failed');
             return { allowed: true };
@@ -184,15 +188,15 @@ sendBtn.addEventListener("click", async () => {
     const text = input.value.trim();
     if (!text) return;
 
-    // Dapatkan IP pengguna
-    const userIP = await getUserIP();
-    if (!userIP) {
-        addMessage("Tidak dapat mendapatkan IP Anda. Pastikan koneksi internet stabil.", "bot");
+    // Dapatkan ID unik pengguna
+    const userID = getUserID();
+    if (!userID) {
+        addMessage("Tidak dapat mendapatkan ID pengguna. Pastikan browser mendukung localStorage.", "bot");
         return;
     }
 
     // Cek dan update limit
-    const limitCheck = await checkAndUpdateLimit(userIP);
+    const limitCheck = await checkAndUpdateLimit(userID);
     if (!limitCheck.allowed) {
         addMessage(limitCheck.message, "bot");
         return;
@@ -231,6 +235,7 @@ input.addEventListener("keypress", (e) => {
     }
 });
 
+// Loading state for form submission
 function setLoadingState(buttonId, isLoading) {
     const button = document.getElementById(buttonId);
     if (!button) return;
