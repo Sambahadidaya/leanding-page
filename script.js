@@ -170,7 +170,7 @@ async function checkAndUpdateLimit(id) {
 // Fungsi untuk mengirim pesan ke n8n
 async function sendToN8n(message) {
     try {
-        const response = await fetch('https://samfoxs.app.n8n.cloud/webhook/chatbot', {  // Ganti dengan URL webhook n8n Anda
+        const response = await fetch('https://samfoxs.app.n8n.cloud/webhook-test/chatbot', {  // Ganti dengan URL webhook n8n Anda
             method: "POST",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify({ message })  // Sesuaikan dengan format yang diharapkan n8n
@@ -414,4 +414,5 @@ document.getElementById('contact-form').addEventListener('submit', async (e) => 
         // alert('Terjadi kesalahan: ' + error.message);
     }
 });
+
 
