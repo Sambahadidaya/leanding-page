@@ -8,7 +8,7 @@ const chatSpinner = document.getElementById("chatSpinner");
 const remainingQuestions = document.getElementById("remainingQuestions"); // Elemen baru
 
 // Konstanta untuk limit
-const MAX_MESSAGES_PER_HOUR = 2; // 5 pesan per jam (sliding window 1 jam)
+const MAX_MESSAGES_PER_HOUR = 1; // 5 pesan per jam (sliding window 1 jam)
 
 // Pesan respons list pertanyaan (dari bot setelah klik tombol)
 const LIST_RESPONSE = "Berikut daftar pertanyaan yang sudah disiapkan ; \n" +
@@ -81,7 +81,7 @@ chatBubble.addEventListener("click", async () => {
         // Jika pertama kali membuka chat dalam sesi ini dan belum pernah dikirim greeting
         if (!greetingSent) {
             setTimeout(() => {
-                addMessage("haii apakah ada yang bisa saya bantu? silahkan ketik atau salin kata 'LIST' maka akan saya kirim list pertanyaan yang sudah disiapkan", "bot");
+                addMessage("haii apakah ada yang bisa saya bantu? silahkan klik tombol dibawah ini untuk melihat daftar pertanyaan", "bot");
                 // Tambahkan respons kedua (tombol) setelah greeting
                 setTimeout(() => addButtonMessage(), 100); // Delay kecil untuk efek berturut-turut
                 greetingSent = true;
@@ -170,7 +170,7 @@ async function checkAndUpdateLimit(id) {
 // Fungsi untuk mengirim pesan ke n8n
 async function sendToN8n(message) {
     try {
-        const response = await fetch('https://samfoxs.app.n8n.cloud/webhook-test/chatbot', {  // Ganti dengan URL webhook n8n Anda
+        const response = await fetch('https://samfoxs.app.n8n.cloud/webhook/chatbot', {  // Ganti dengan URL webhook n8n Anda
             method: "POST",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify({ message })  // Sesuaikan dengan format yang diharapkan n8n
@@ -414,3 +414,4 @@ document.getElementById('contact-form').addEventListener('submit', async (e) => 
         // alert('Terjadi kesalahan: ' + error.message);
     }
 });
+
