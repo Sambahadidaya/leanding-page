@@ -214,8 +214,10 @@
                     </div>
                     <!-- Actual Content -->
                     <img id="candidatePhoto" src="" alt="Foto kandidat"
-                        class="edit-bg1 sm:w-64 sm:h-48 w-48 h-32 rounded-lg mx-auto mb-4 object-cover hidden" loading="lazy">
-                    <h2 id="candidateName" style="white-space: pre-wrap;" class="text-2xl font-bold text-white mb-2 hidden"></h2>
+                        class="edit-bg1 sm:w-64 sm:h-48 w-48 h-32 rounded-lg mx-auto mb-4 object-cover hidden"
+                        loading="lazy">
+                    <h2 id="candidateName" style="white-space: pre-wrap;"
+                        class="text-2xl font-bold text-white mb-2 hidden"></h2>
                     <p id="candidateNumber" class="text-lg text-white mb-2 hidden">Paslon No, </p>
                     <!-- Tombol pilih dihapus -->
                 </div>
@@ -252,169 +254,12 @@
     </div>
     <!-- Footer -->
     <footer class="bg-blue-900 mt-8 text-center text-white font-semibold py-4 text-sm opacity-60 sm:mt-auto md:mt-auto">
-      <!-- Tambahkan mt-auto untuk push ke bawah -->
-      © Coppyright KPU 2026. Dikembangkan oleh Panitia KPU(Samba).
+        <!-- Tambahkan mt-auto untuk push ke bawah -->
+        © 2025. 2025. Dikembangkan oleh Panitia KPUM-By_Samba.
     </footer>
-
-    <!-- Script JS (Dimodifikasi dan disertakan inline) -->
-    <script>
-        // ====================
-        // VARIABEL UTAMA (Disalin dari script.js, tapi fokus pada kandidat saja)
-        // ====================
-        let candidates = [];
-        let activeCandidateId = null;
-
-        // ====================
-        // PELACAKAN KUNJUNGAN (Opsional, salin jika perlu)
-        // ====================
-
-        // Fungsi untuk menampilkan skeleton loader
-        function showSkeleton() {
-            const profileSkeleton = document.getElementById('profileSkeleton');
-            const vmSkeleton = document.getElementById('vmSkeleton');
-            if (profileSkeleton) profileSkeleton.classList.remove('hidden');
-            if (vmSkeleton) vmSkeleton.classList.remove('hidden');
-        }
-
-        // Fungsi untuk menyembunyikan skeleton loader
-        function hideSkeleton() {
-            const profileSkeleton = document.getElementById('profileSkeleton');
-            const vmSkeleton = document.getElementById('vmSkeleton');
-            if (profileSkeleton) profileSkeleton.classList.add('hidden');
-            if (vmSkeleton) vmSkeleton.classList.add('hidden');
-        }
-
-        // Fungsi untuk render profil kandidat aktif
-        function renderActiveCandidate(candidate) {
-            const candidatePhoto = document.getElementById('candidatePhoto');
-            const candidateName = document.getElementById('candidateName');
-            const candidateNumber = document.getElementById('candidateNumber');
-
-            if (candidatePhoto) {
-                candidatePhoto.src = candidate.foto_url;
-                candidatePhoto.classList.remove('hidden');
-            }
-            if (candidateName) {
-                candidateName.textContent = candidate.nama;
-                candidateName.classList.remove('hidden');
-            }
-            if (candidateNumber) {
-                candidateNumber.textContent = `Paslon No. ${candidate.No}`;
-                candidateNumber.classList.remove('hidden');
-            }
-            // Tombol pilih dihapus
-        }
-
-        // Fungsi untuk render Visi & Misi
-        function renderVisionMission(candidate) {
-            const visionText = document.getElementById('visionText');
-            const missionText = document.getElementById('missionText');
-            const visionMissionText = document.getElementById('visionMissionText');
-
-            if (visionText) visionText.textContent = candidate.visi;
-            if (missionText) missionText.textContent = candidate.misi;
-            if (visionMissionText) visionMissionText.classList.remove('hidden');
-        }
-
-        // Fungsi untuk render thumbnails kandidat (Untuk navigasi)
-        function renderThumbnails() {
-            const container = document.getElementById('candidateThumbnails');
-            if (!container) return;
-            container.innerHTML = '';
-            candidates.forEach(candidate => {
-                const thumbnail = document.createElement('div');
-                thumbnail.className = `flex-shrink-0 w-20 h-20 rounded-lg overflow-hidden cursor-pointer transition-all duration-300 border-2 ${candidate.id === activeCandidateId ? 'border-blue-500 transform -translate-y-3 shadow-lg scale-120' : 'border-gray-300'}`;
-                thumbnail.innerHTML = `<img src="${candidate.foto_url}" alt="Foto kandidat ${candidate.nama}" class="w-full h-full object-cover" loading="lazy">`;
-                thumbnail.dataset.candidateId = candidate.id;
-                thumbnail.addEventListener('click', () => setActiveCandidate(candidate.id));
-                container.appendChild(thumbnail);
-            });
-        }
-
-        // Fungsi untuk mengatur kandidat aktif
-        function setActiveCandidate(id) {
-            const candidate = candidates.find(c => c.id === id);
-            if (!candidate) return;
-            activeCandidateId = id;
-            renderActiveCandidate(candidate);
-            renderVisionMission(candidate);
-            renderThumbnails();
-        }
-
-        // Fungsi untuk fetch data kandidat
-        async function fetchCandidates() {
-            try {
-                const { data, error } = await supabaseClient
-                    .from('kandidat')  // Tetap 'kandidat'
-                    .select('id, nama, No, foto_url, visi, misi')  // Ubah 'name' ke 'nama', 'number' ke 'No'
-                    .order('No');  // Ubah 'number' ke 'No'
-                if (error) throw error;
-                candidates = data;
-                // PERUBAHAN: Sinkronkan kandidatData dengan candidates untuk kompatibilitas
-                kandidatData = candidates;  // Pastikan kandidatData juga terisi
-                if (candidates.length > 0) {
-                    setActiveCandidate(activeCandidateId || candidates[0].id); // Set kandidat pertama sebagai aktif jika belum ada
-                }
-            } catch (error) {
-                console.error('Error fetching candidates:', error);
-                alert('Gagal memuat data kandidat. Silakan reload halaman.');
-            }
-        }
-
-        // ====================
-        // KONFIGURASI SUPABASE (Sama seperti asli)
-        // ====================
-        const SUPABASE_URL = 'https://xxwwbydzorlxulbcrldo.supabase.co';
-        const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Inh4d3dieWR6b3JseHVsYmNybGRvIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjExMDAxMDYsImV4cCI6MjA3NjY3NjEwNn0.La5nOg80azsQp_ZuqXuj0CI552hQBwdwWgxEqfaDlDk';
-        const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
-
-        
-        // Inisialisasi halaman
-        async function initVotingPage() {
-            showSkeleton();
-            activeCandidateId = null;  // PERUBAHAN: Reset activeCandidateId agar selalu default ke kandidat pertama
-            await fetchCandidates();  // Ini akan set kandidat pertama sebagai aktif
-            hideSkeleton();
-        }
-        // ====================
-        // LOGOUT
-        // ====================
-        function logout(buttonId) {
-            setLoadingState(buttonId, true);
-            setTimeout(() => {
-                // Redirect ke index.html atau halaman utama
-                window.location.href = '/index.html';
-                setLoadingState(buttonId, false);
-            }, 500);
-        }
-
-        // ====================
-        // FUNGSI LOADING STATE UNTUK TOMBOL
-        // ====================
-        function setLoadingState(buttonId, isLoading) {
-            const button = document.getElementById(buttonId);
-            if (!button) return;  // Jika tombol tidak ada, skip
-            const spinner = button.querySelector('.spinner');
-            if (isLoading) {
-                if (spinner) spinner.classList.remove('hidden');
-                button.disabled = true;
-            } else {
-                if (spinner) spinner.classList.add('hidden');
-                button.disabled = false;
-            }
-        }
-
-        // ====================
-        // EVENT LISTENER
-        // ====================
-        const logoutResultsBtn = document.getElementById("logoutResultsBtn");
-        if (logoutResultsBtn) logoutResultsBtn.addEventListener("click", (e) => logout(e.target.id));
-        initVotingPage();
-    </script>
-
+    <script src="script.js"></script>
     <script type="module" src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"></script>
     <script nomodule src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.js"></script>
 </body>
 
 </html>
-
