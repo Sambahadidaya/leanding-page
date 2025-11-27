@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="id">
+<html lang="en">
 
 <head>
   <meta charset="UTF-8">
@@ -182,6 +182,9 @@
       border: transparent 1px solid;
       color: #0f222c;
     }
+    .hijikn {
+      white-space: pre-wrap;
+    }
   </style>
 </head>
 
@@ -233,7 +236,7 @@
     <!-- Footer -->
     <footer class="mt-8 text-center text-white font-semibold py-4 text-sm opacity-60 sm:mt-auto md:mt-auto">
       <!-- Tambahkan mt-auto untuk push ke bawah -->
-      © Coppyright KPU 2026. Dikembangkan oleh Panitia KPU.
+      © 2025. Dikembangkan oleh Panitia KPUM-By_Samba.
     </footer>
   </div>
 
@@ -242,7 +245,7 @@
     <!-- Header -->
     <header class="bg-[#01010138] shadow-md p-4 flex justify-between items-center">
       <span id="welcomeMessage" class="text-sm sm:text-lg md:text-xl text-center text-[#C9E1EB] font-semibold">Selamat
-        datang <span id="userName">Loading...</span> Silahlan pilih kandidat</span>
+        datang <span id="userName">Loading...</span> Silahkan pilih kandidat</span>
       <div class="flex items-center space-x-4">
         <button id="logoutBtn"
           class="borrder-tombol2 px-2 py-1 sm:px-4 sm:py-2 md:px-4 md:py-2 rounded-lg transition-colors duration-200">Keluar</button>
@@ -250,22 +253,21 @@
     </header>
 
     <!-- Main Content -->
-    <main class="flex flex-col lg:flex-row min-h-[calc(80vh-80px)]">
-      <!-- Panel Kiri: Profil Kandidat Aktif -->
-      <div class="lg:w-1/3 p-6 shadow-xl m-4 rounded-lg">
+    <main class="flex flex-col sm:flex-row min-h-[calc(80vh-80px)]">
+      <!-- Panel Kiri: Profil Kandidat -->
+      <div class="sm:w-1/3 p-2 sm:p-6 shadow-xl m-4 rounded-lg">
         <div id="candidateProfile" class="text-center">
           <!-- Skeleton Loader -->
           <div id="profileSkeleton" class="animate-pulse">
             <div class="w-32 h-32 bg-gray-300 rounded-full mx-auto mb-4"></div>
             <div class="h-6 bg-gray-300 rounded mb-2"></div>
             <div class="h-4 bg-gray-300 rounded mb-4"></div>
-            <div class="h-10 bg-gray-300 rounded"></div>
           </div>
           <!-- Actual Content -->
           <img id="candidatePhoto" src="" alt="Foto kandidat"
-            class="borrder w-64 h-48 rounded-lg mx-auto mb-4 object-cover hidden" loading="lazy">
-          <h2 id="candidateName" class="text-2xl font-bold text-white hidden"></h2>
-          <p id="candidateNumber" class="text-lg text-white mb-2 hidden">Kandidat </p>
+            class="edit-bg1 sm:w-64 sm:h-48 w-48 h-32 rounded-lg mx-auto mb-4 object-cover hidden" loading="lazy">
+          <h2 id="candidateName" class="hijikn text-2xl font-bold text-white mb-2 hidden"></h2>
+          <p id="candidateNumber" class="text-lg text-white mb-2 hidden">Paslon No, </p>
           <button id="selectCandidateBtn" onclick="showVoteConfirmation()"
             class="borrder-tombol2 px-6 py-3 rounded-lg font-semibold transition-colors duration-200 hidden">Pilih
             Kandidat</button>
@@ -273,9 +275,8 @@
       </div>
 
       <!-- Panel Tengah: Visi & Misi -->
-      <div class="lg:w-2/3 edit-bg1 p-6 shadow-lg m-4 rounded-lg flex-1">
-        <h3 class="text-3xl font-bold text-white mb-4">Visi & Misi</h3>
-        <div id="visionMissionContent" class="max-h-96 overflow-y-auto">
+      <div class="sm:w-2/3 edit-bg1 p-6 shadow-lg m-4 rounded-lg flex-1">
+        <div id="visionMissionContent" class="p-2 max-h-40 sm:max-h-80 overflow-y-auto">
           <!-- Skeleton Loader -->
           <div id="vmSkeleton" class="animate-pulse space-y-4">
             <div class="h-4 bg-gray-300 rounded"></div>
@@ -286,8 +287,10 @@
           </div>
           <!-- Actual Content -->
           <div id="visionMissionText" class="leading-relaxed hidden">
+            <h3 class="text-3xl font-bold text-white mb-4">Visi</h3>
             <p id="visionText"></p>
-            <p id="missionText" class="mt-4 preserve-newliness" style="white-space: pre-wrap;"></p>
+            <h3 class="text-3xl font-bold text-white mb-4 mt-4">Misi</h3>
+            <p id="missionText" class="hijikn mt-4 preserve-newlines"></p>
           </div>
         </div>
       </div>
@@ -325,26 +328,11 @@
       </button>
     </div>
   </div>
+  <!-- Tambah di akhir body, sebelum script -->
+  <div id="toastContainer" class="fixed top-4 right-4 z-50 space-y-2"></div>
 
   <script src="script.js"></script>
-  <script>(function () { function c() { var b = a.contentDocument || a.contentWindow.document; if (b) { var d = b.createElement('script'); d.innerHTML = "window.__CF$cv$params={r:'98faf6674423aa11',t:'MTc2MDY1MzQyNi4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);"; b.getElementsByTagName('head')[0].appendChild(d) } } if (document.body) { var a = document.createElement('iframe'); a.height = 1; a.width = 1; a.style.position = 'absolute'; a.style.top = 0; a.style.left = 0; a.style.border = 'none'; a.style.visibility = 'hidden'; document.body.appendChild(a); if ('loading' !== document.readyState) c(); else if (window.addEventListener) document.addEventListener('DOMContentLoaded', c); else { var e = document.onreadystatechange || function () { }; document.onreadystatechange = function (b) { e(b); 'loading' !== document.readyState && (document.onreadystatechange = e, c()) } } } })();</script>
-  <!-- <script>    function redirectCU(e) {
-    if (e.ctrlKey && e.which == 85) {
-      window.location.replace("403.html");
-      return false;
-    }
-  }
-  document.onkeydown = redirectCU;
-
-  //Script Redirect Klik Kanan
-  function redirectKK(e) {
-    if (e.which == 3) {
-      window.location.replace("403.html");
-      return false;
-    }
-  }
-  document.oncontextmenu = redirectKK;
-  //]]></script> -->
+  <!-- <script>(function () { function c() { var b = a.contentDocument || a.contentWindow.document; if (b) { var d = b.createElement('script'); d.innerHTML = "window.__CF$cv$params={r:'98faf6674423aa11',t:'MTc2MDY1MzQyNi4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);"; b.getElementsByTagName('head')[0].appendChild(d) } } if (document.body) { var a = document.createElement('iframe'); a.height = 1; a.width = 1; a.style.position = 'absolute'; a.style.top = 0; a.style.left = 0; a.style.border = 'none'; a.style.visibility = 'hidden'; document.body.appendChild(a); if ('loading' !== document.readyState) c(); else if (window.addEventListener) document.addEventListener('DOMContentLoaded', c); else { var e = document.onreadystatechange || function () { }; document.onreadystatechange = function (b) { e(b); 'loading' !== document.readyState && (document.onreadystatechange = e, c()) } } } })();</script> -->
   <script type="module" src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"></script>
   <script nomodule src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.js"></script>
 
