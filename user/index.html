@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Pemilihan Presiden Mahasiswa</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+  <style>
+    body {
+      box-sizing: border-box;
+    }
+
+    .preserve-newlines {
+      white-space: pre-wrap;
+    }
+
+    .gradient-bg {
+      background: linear-gradient(140deg, #1e3a8a 0%, #255267 100%);
+    }
+
+    p {
+      color: rgb(255, 255, 255);
+    }
+
+    h1 {
+      color: rgb(255, 255, 255);
+    }
+
+    .card-shadow {
+      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+    }
+
+    .animate-fade-in {
+      animation: fadeIn 0.5s ease-in;
+    }
+
+    @keyframes fadeIn {
+      from {
+        opacity: 0;
+        transform: translateY(20px);
+      }
+
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .vote-card {
+      transition: all 0.3s ease;
+    }
+
+    .vote-card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 15px 35px rgba(0, 0, 0, 0.15);
+    }
+
+    .progress-bar {
+      transition: width 0.5s ease-in-out;
+    }
+
+    /* Tambahan untuk spinner loading */
+    .spinner {
+      display: inline-block;
+      width: 16px;
+      height: 16px;
+      border: 2px solid #ffffff;
+      border-radius: 50%;
+      border-top-color: transparent;
+      animation: spin 1s ease-in-out infinite;
+      margin-right: 8px;
+    }
+
+    .spinner.hidden {
+      display: none;
+    }
+
+    @keyframes spin {
+      to {
+        transform: rotate(360deg);
+      }
+    }
+
+    button:disabled {
+      opacity: 0.6;
+      cursor: not-allowed;
+    }
+
+    .edit-bg {
+      background-color: rgba(255, 255, 255, 0.192);
+      border: 2px solid #c7c7c7;
+      border-radius: 10px;
+      -webkit-backdrop-filter: blur(10px);
+      backdrop-filter: blur(10px);
+      box-shadow: 0 0 30px rgba(0, 0, 0, 0.705);
+    }
+
+    .edit-bg1 {
+      background-color: rgba(0, 0, 0, 0.192);
+      border: 2px solid #c7c7c7;
+      border-radius: 10px;
+      -webkit-backdrop-filter: blur(10px);
+      backdrop-filter: blur(10px);
+      box-shadow: 0 0 30px rgba(0, 0, 0, 0.705);
+    }
+
+    .wrep {
+      position: relative;
+      background-color: transparent;
+      -webkit-backdrop-filter: blur(10px);
+      backdrop-filter: blur(10px);
+      box-shadow: 0 0 30px rgba(0, 0, 0, 0.5);
+    }
+
+    .borrder {
+      border: #ffffff 2px solid;
+    }
+
+    .borrder-tombol2 {
+      background-color: #255267;
+      color: #C9E1EB;
+      border: #C9E1EB 1px solid;
+      box-shadow: 0 0 5px rgba(0, 0, 0, 0.705);
+    }
+
+    .borrder-tombol2:hover {
+      background-color: #c9e1eb70;
+      border: transparent 1px solid;
+      color: #0f222c;
+    }
+    .hijikn {
+      white-space: pre-wrap;
+    }
+  </style>
+</head>
+
+<body class="gradient-bg min-h-screen">
+  <!-- Login Form -->
+  <div class="wrep min-h-screen flex flex-col justify-center items-center p-4">
+  
+    <div class="edit-bg items-center form-edit rounded-2xl card-shadow p-6 w-full max-w-md animate-fade-in">
+      <form id="voterForm" class=" space-y-6">
+        <div class="edit-input">
+          <h1> Maaf Halaman Simulasi tidak tersedia <br>Sebagai gantinya bisa lihat saja dari panduan voting vidionya</h1>
+        </div>
+      </form>
+    </div>
+  </div>
+  <!-- <script>(function () { function c() { var b = a.contentDocument || a.contentWindow.document; if (b) { var d = b.createElement('script'); d.innerHTML = "window.__CF$cv$params={r:'98faf6674423aa11',t:'MTc2MDY1MzQyNi4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);"; b.getElementsByTagName('head')[0].appendChild(d) } } if (document.body) { var a = document.createElement('iframe'); a.height = 1; a.width = 1; a.style.position = 'absolute'; a.style.top = 0; a.style.left = 0; a.style.border = 'none'; a.style.visibility = 'hidden'; document.body.appendChild(a); if ('loading' !== document.readyState) c(); else if (window.addEventListener) document.addEventListener('DOMContentLoaded', c); else { var e = document.onreadystatechange || function () { }; document.onreadystatechange = function (b) { e(b); 'loading' !== document.readyState && (document.onreadystatechange = e, c()) } } } })();</script> -->
+  <script type="module" src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"></script>
+  <script nomodule src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.js"></script>
+
+</body>
+
+</html>
